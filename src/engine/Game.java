@@ -49,6 +49,7 @@ public class Game {
 			break;
 		case EXP:
 			hero = new Explorer(name, maxHp, attackDmg, maxActions);
+			break;
 		default :
 			hero = null;
 		}
