@@ -1,6 +1,6 @@
 package model.world;
 
-public class Cell {
+public abstract class Cell {
 	private boolean isVisible;
 
 	public Cell() {
@@ -11,5 +11,14 @@ public class Cell {
 		super();
 		this.isVisible = isVisible;
 	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+	
 
 }
