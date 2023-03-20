@@ -33,10 +33,10 @@ public class Game {
 		int maxActions = Integer.parseInt(row[3]);
 		int attackDmg = Integer.parseInt(row[4]);
 		HeroType type = HeroType.valueOf(row[1]);
-		return heroTypeDetecter(type, name, maxHp, maxActions, attackDmg);
+		return heroTypeDetector(type, name, maxHp, maxActions, attackDmg);
 	}
 
-	public static Hero heroTypeDetecter(HeroType type, String name, int maxHp, int maxActions, int attackDmg) {
+	public static Hero heroTypeDetector(HeroType type, String name, int maxHp, int maxActions, int attackDmg) {
 		Hero hero;
 		switch (type) {
 		case FIGH:
