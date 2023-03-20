@@ -5,6 +5,8 @@ import java.io.*;
 import java.awt.*;
 import exceptions.*;
 import model.characters.*;
+import model.world.*;
+import model.collections.*;
 
 public class Game {
 
@@ -24,15 +26,16 @@ public class Game {
 		while ((row = reader.readLine()) != null) {
 			availableHeros.add(heroDataParser(row.split(",")));
 		}
+		reader.close();
 		// ! If a hero instance is null -> Incorrect hero type was given
 	}
 
 	public static Hero heroDataParser(String[] row) {
 		String name = row[0];
+		HeroType type = HeroType.valueOf(row[1]);
 		int maxHp = Integer.parseInt(row[2]);
 		int maxActions = Integer.parseInt(row[3]);
 		int attackDmg = Integer.parseInt(row[4]);
-		HeroType type = HeroType.valueOf(row[1]);
 		return heroTypeDetector(type, name, maxHp, maxActions, attackDmg);
 	}
 
