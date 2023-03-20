@@ -1,7 +1,8 @@
 package model.characters;
 import java.util.*;
-import model.collections.Supply;
-import model.collections.Vaccine;
+
+import model.collectibles.Supply;
+import model.collectibles.Vaccine;
 
 public class Hero extends Character {
 	private int actionsAvailable;

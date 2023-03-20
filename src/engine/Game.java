@@ -5,13 +5,13 @@ import java.io.*;
 import java.awt.*;
 import exceptions.*;
 import model.characters.*;
+import model.collectibles.*;
 import model.world.*;
-import model.collections.*;
 
 public class Game {
 
-	public static ArrayList<Hero> availableHeros = new ArrayList<Hero>();
-	public static ArrayList<Hero> heros = new ArrayList<Hero>();
+	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
+	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Hero> zombies = new ArrayList<Hero>();
 
 	public static Cell[][] map;
@@ -19,12 +19,11 @@ public class Game {
 	public Game() {
 	}
 
-	public static void loadHeros(String filePath) throws Exception {
-		filePath = "CSV\\" + filePath;
+	public static void loadHeroes(String filePath) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(filePath));
 		String row;
 		while ((row = reader.readLine()) != null) {
-			availableHeros.add(heroDataParser(row.split(",")));
+			availableHeroes.add(heroDataParser(row.split(",")));
 		}
 		reader.close();
 		// ! If a hero instance is null -> Incorrect hero type was given
@@ -50,6 +49,8 @@ public class Game {
 			break;
 		case EXP:
 			hero = new Explorer(name, maxHp, attackDmg, maxActions);
+		default :
+			hero = null;
 		}
 		return hero;
 	}

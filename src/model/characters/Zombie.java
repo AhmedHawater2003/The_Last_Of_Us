@@ -1,5 +1,5 @@
 package model.characters;
-import java.util.*;
+
 public class Zombie extends Character {
 static int ZOMBIES_COUNT;
 

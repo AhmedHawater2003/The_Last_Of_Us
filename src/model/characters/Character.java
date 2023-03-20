@@ -5,7 +5,7 @@ import java.awt.*; // Includes Point class
 public abstract class Character {
 	private String name; // Read Only
 	private Point location;
-	private int maxHp, currHp, attackDmg; // maxHp & attackDmg are READ only
+	private int maxHp, currentHp, attackDmg; // maxHp & attackDmg are READ only
 	private Character target;
 
 	public Character() {
@@ -16,6 +16,7 @@ public abstract class Character {
 		this.name = name;
 		this.maxHp = maxHp;
 		this.attackDmg = attackDmg;
+		this.currentHp = this.maxHp;
 	}
 
 	public Point getLocation() {
@@ -26,12 +27,12 @@ public abstract class Character {
 		this.location = location;
 	}
 
-	public int getCurrHp() {
-		return currHp;
+	public int getCurrentHp() {
+		return currentHp;
 	}
 
-	public void setCurrHp(int currHp) {
-		this.currHp = currHp;
+	public void setCurrentHp(int currentHp) {
+		this.currentHp = currentHp;
 	}
 
 	public Character getTarget() {
