@@ -20,9 +20,9 @@ public class Game {
 	public static void loadHeros(String filePath) throws Exception {
 		filePath = "CSV\\" + filePath;
 		BufferedReader reader = new BufferedReader(new FileReader(filePath));
-		String[] row;
-		while ((row = reader.readLine().split(",")) != null) {
-			availableHeros.add(heroDataParser(row));
+		String row;
+		while ((row = reader.readLine()) != null) {
+			availableHeros.add(heroDataParser(row.split(",")));
 		}
 		// ! If a hero instance is null -> Incorrect hero type was given
 	}
