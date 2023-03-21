@@ -1,5 +1,4 @@
 package model.characters;
-
 import java.awt.*; // Includes Point class
 
 public abstract class Character {

@@ -1,7 +1,7 @@
 package model.world;
 import java.util.Random;
 public class TrapCell extends Cell {
-	private int trapDamage;
+	private int trapDamage; //Read Only
 	public TrapCell() {
 		// TODO Auto-generated constructor stub
 	}
@@ -21,5 +21,5 @@ public class TrapCell extends Cell {
 		int randomIndex = random.nextInt(PossibleDamage.length);
 		return PossibleDamage[randomIndex];
 	 }
-	 
+		
 }

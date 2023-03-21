@@ -1,6 +1,5 @@
 package model.characters;
 import java.util.*;
-
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
