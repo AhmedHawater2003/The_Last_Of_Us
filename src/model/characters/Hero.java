@@ -1,20 +1,24 @@
 package model.characters;
-import java.util.*;
+
+import java.util.ArrayList;
+
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
 public abstract class Hero extends Character {
 	private int actionsAvailable;
-	private int maxActions; //Read Only
+	private int maxActions; // Read Only
 	private boolean specialAction;
-	private ArrayList <Vaccine> vaccineInventory; //Read Only
-	private ArrayList <Supply>  supplyInventory;  //Read Only
+	private ArrayList<Vaccine> vaccineInventory; // Read Only
+	private ArrayList<Supply> supplyInventory; // Read Only
+
 	public Hero() {
 		// TODO Auto-generated constructor stub
 	}
-	public Hero(String name, int maxHp, int attackDmg,int maxActions) {
+
+	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
-		this.maxActions = maxActions; 
+		this.maxActions = maxActions;
 		this.actionsAvailable = this.maxActions;
 		this.vaccineInventory = new ArrayList<>();
 		this.supplyInventory = new ArrayList<>();
@@ -31,7 +35,7 @@ public abstract class Hero extends Character {
 	public int getMaxActions() {
 		return maxActions;
 	}
-	
+
 	public boolean isSpecialAction() {
 		return specialAction;
 	}
@@ -43,7 +47,8 @@ public abstract class Hero extends Character {
 	public ArrayList<Vaccine> getVaccineInventory() {
 		return vaccineInventory;
 	}
-	public ArrayList<Supply>getSupplyInventory() {
+
+	public ArrayList<Supply> getSupplyInventory() {
 		return supplyInventory;
 	}
 

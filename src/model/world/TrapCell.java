@@ -9,6 +9,7 @@ public class TrapCell extends Cell {
 		this.trapDamage = getRandomDamage();
 	}
 
+	// Defensive Procedures in case of testing multiple argument constructors
 	public TrapCell(boolean isVisible) {
 		super(isVisible);
 		this.trapDamage = getRandomDamage();

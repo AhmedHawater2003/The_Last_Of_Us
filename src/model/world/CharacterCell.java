@@ -15,6 +15,20 @@ public class CharacterCell extends Cell {
 		this.character = character;
 	}
 
+	// Defensive Procedures in case of testing multiple argument constructors
+	public CharacterCell(Character character, boolean isSafe) {
+		super(true);
+		this.character = character;
+		this.isSafe = isSafe;
+	}
+
+	public CharacterCell(Character character, boolean isSafe, boolean isVisible) {
+		super(isVisible);
+		this.character = character;
+		this.isSafe = isSafe;
+
+	}
+
 	public Character getCharacter() {
 		return this.character;
 	}
