@@ -1,5 +1,7 @@
 package model.characters;
-import java.awt.*; // Includes Point class
+
+// Includes Point class
+import java.awt.Point;
 
 public abstract class Character {
 	private String name; // Read Only
@@ -10,7 +12,7 @@ public abstract class Character {
 	public Character() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public Character(String name, int maxHp, int attackDmg) {
 		this.name = name;
 		this.maxHp = maxHp;
@@ -31,10 +33,12 @@ public abstract class Character {
 	}
 
 	public void setCurrentHp(int currentHp) {
-		if(currentHp <= this.maxHp)
-			this.currentHp = currentHp;
+		if (currentHp < 0)
+			this.currentHp = 0;
+		else if (currentHp > maxHp)
+			this.currentHp = maxHp;
 		else
-			this.currentHp = this.maxHp;
+			this.currentHp = currentHp;
 	}
 
 	public Character getTarget() {
