@@ -12,10 +12,6 @@ public abstract class Hero extends Character {
 	private ArrayList<Vaccine> vaccineInventory; // Read Only
 	private ArrayList<Supply> supplyInventory; // Read Only
 
-	public Hero() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
 		this.maxActions = maxActions;

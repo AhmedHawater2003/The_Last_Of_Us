@@ -1,10 +1,10 @@
 package model.characters;
 
 public class Zombie extends Character {
-	static int ZOMBIES_COUNT;
+	static int ZOMBIES_COUNT = 1;
 
-	public Zombie() {// constructor to set the name of the zombie and his power
-		super("Zombie " + (ZOMBIES_COUNT + 1), 40, 10);// i used the count +1 to start from 1 not zero
+	public Zombie() {
+		super("Zombie " + ZOMBIES_COUNT, 40, 10);
 		ZOMBIES_COUNT++;
 	}
 }

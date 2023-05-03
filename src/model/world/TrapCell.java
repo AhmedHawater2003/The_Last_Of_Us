@@ -9,11 +9,6 @@ public class TrapCell extends Cell {
 		this.trapDamage = getRandomDamage();
 	}
 
-	public static void main(String[] args) {
-		TrapCell test = new TrapCell();
-		System.out.println(test.getTrapDamage());
-	}
-
 	public int getTrapDamage() {
 		return this.trapDamage;
 	}
