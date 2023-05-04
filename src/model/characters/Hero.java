@@ -2,6 +2,7 @@ package model.characters;
 
 import java.util.ArrayList;
 
+import exceptions.*;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
@@ -18,6 +19,16 @@ public abstract class Hero extends Character {
 		this.actionsAvailable = this.maxActions;
 		this.vaccineInventory = new ArrayList<>();
 		this.supplyInventory = new ArrayList<>();
+	}
+
+	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+		if (this.actionsAvailable <= 0) {
+			throw new NotEnoughActionsException("No actions available");
+		}
+		if (this.getTarget() instanceof Hero) {
+			throw new InvalidTargetException("A hero cannot attack another hero");
+		}
+		super.attack();
 	}
 
 	public int getActionsAvailable() {
