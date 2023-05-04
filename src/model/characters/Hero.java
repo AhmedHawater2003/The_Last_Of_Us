@@ -6,7 +6,7 @@ import exceptions.*;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
-public abstract class Hero extends Character {
+public class Hero extends Character { // Should be abstract after testing
 	private int actionsAvailable;
 	private int maxActions; // Read Only
 	private boolean specialAction;
@@ -22,6 +22,10 @@ public abstract class Hero extends Character {
 	}
 
 	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+		if (this.getTarget() == null) {
+			throw new InvalidTargetException("No target to attack");
+		}
+
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException("No actions available");
 		}

@@ -15,7 +15,7 @@ public class Game {
 	public static Random GameRandom = new Random();
 	public static Cell[][] map;
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
-	public static ArrayList<Point> freeCells = new ArrayList<Point>();
+	public static ArrayList<Point> freeCellsLocations = new ArrayList<Point>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
@@ -41,11 +41,12 @@ public class Game {
 
 	}
 
-	public static Point getFreeCell() {
-		int randomIndex = GameRandom.nextInt(freeCells.size());
-		Point freeCell = freeCells.get(randomIndex);
-		freeCells.remove(randomIndex);
-		return freeCell;
+	public static Point getFreeCellLocation() {
+		if (freeCellsLocations.isEmpty())
+			return null;
+		int randomIndex = GameRandom.nextInt(freeCellsLocations.size());
+		Point location = freeCellsLocations.remove(randomIndex);
+		return location;
 	}
 
 }

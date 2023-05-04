@@ -15,13 +15,12 @@ public class Zombie extends Character {
 
 	public void attack() throws InvalidTargetException, NotEnoughActionsException {
 		setZombieTarget();
-		if(this.getTarget() == null)
+		if (this.getTarget() == null)
 			return;
-		super.attack();
 	}
 
 	public void setZombieTarget() {
-		for (Point p : this.getAdjCells()) {
+		for (Point p : this.getAdjLocations()) {
 			Cell atPoint = Game.map[p.x][p.y];
 			if (atPoint instanceof CharacterCell) {
 				if (((CharacterCell) atPoint).getCharacter() instanceof Hero) {
