@@ -1,17 +1,18 @@
 package engine;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Random;
 import model.characters.Hero;
 import model.characters.HeroType;
 import model.characters.Zombie;
 import model.world.Cell;
 
 public class Game {
-
+	public static Random GameRandom = new Random();
 	public static Cell[][] map;
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
@@ -37,6 +38,12 @@ public class Game {
 
 		return type.generateHero(name, maxHp, maxActions, attackDmg);
 
+	}
+
+	public static Point getFreeCell() {
+		int randomIndex = GameRandom.nextInt(freeCells.size());
+		Point freeCell = freeCells.get(randomIndex);
+		freeCell.remove(randomIndex);
 	}
 
 }
