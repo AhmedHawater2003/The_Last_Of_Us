@@ -1,10 +1,13 @@
 package model.characters;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
+import model.world.CharacterCell;
 
 public class Character { // Abstract class Again After testing
 	private String name; // Read Only
@@ -140,4 +143,28 @@ public class Character { // Abstract class Again After testing
 		return attackDmg;
 	}
 
+	public void onCharacterDeath() {
+		if (this.getCurrentHp() <= 0) {
+			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
+			Game.freeCellsLocations.add(this.getLocation());
+			removeCharacter(this, Game.heroes, Game.zombies);
+		}
+	}
+
+	public void spawnZombie() {
+		Zombie SpawnedZombie = new Zombie();
+		if (Game.getFreeCellLocation() == null) {
+			return;
+		}
+		((CharacterCell) Game.map[location.x][location.y]).setCharacter(SpawnedZombie);
+	}
+
+	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
+		if (character instanceof Hero) {
+			heroes.remove((Hero) character);
+		} else if (character instanceof Zombie) {
+			zombies.remove((Zombie) character);
+			spawnZombie();
+		}
+	}
 }

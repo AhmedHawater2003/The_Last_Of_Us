@@ -2,7 +2,9 @@ package model.characters;
 
 import java.util.ArrayList;
 
-import exceptions.*;
+import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 
@@ -61,6 +63,35 @@ public class Hero extends Character { // Should be abstract after testing
 
 	public ArrayList<Supply> getSupplyInventory() {
 		return supplyInventory;
+	}
+
+	public void move(Direction d) {
+		// int currposX;
+		// int currposY;
+		int newposX = 0;
+		int newposY = 0;
+		// if the cell isn't occupied or out-of grid
+		if (Game.map[newposX][newposY] != null && newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
+			return;
+		} else {
+			switch (d) {
+			case UP:
+				newposY--;
+				break;
+			case DOWN:
+				newposY++;
+				break;
+			case LEFT:
+				newposX--;
+				break;
+			case RIGHT:
+				newposX++;
+				break;
+			}
+		}
+		Game.map[newposX][newposY].setVisible(true);
+
+		actionsAvailable--;
 	}
 
 }
