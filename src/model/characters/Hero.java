@@ -5,10 +5,14 @@ import java.util.ArrayList;
 
 import engine.Game;
 import exceptions.InvalidTargetException;
+import exceptions.MovementException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
+import model.world.CharacterCell;
+import model.world.CollectibleCell;
+import model.world.TrapCell;
 
 public class Hero extends Character { // Should be abstract after testing
 	private int actionsAvailable;
@@ -76,32 +80,58 @@ public class Hero extends Character { // Should be abstract after testing
 		return supplyInventory;
 	}
 
-	public void move(Direction d) {
-		// int currposX;
-		// int currposY;
+	public void move(Direction d) throws MovementException {
+		Point currpos = this.getLocation();
+		int currposX = currpos.x;
+		int currposY = currpos.y;
 		int newposX = 0;
 		int newposY = 0;
-		// if the cell isn't occupied or out-of grid
-		if (Game.map[newposX][newposY] != null && newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
-			return;
+		// if the cell isn't out-of grid
+		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
+		// if the Cell isn't occupied
+		if ((Game.map[newposX][newposY] instanceof CharacterCell)
+				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
+			throw new MovementException("You Can Not Move into Occupied Cell");
 		} else {
 			switch (d) {
 			case UP:
-				newposY--;
+				newposX = currposX + 1;
 				break;
 			case DOWN:
-				newposY++;
+				newposX = currposX - 1;
 				break;
 			case LEFT:
-				newposX--;
+				newposY = currposY - 1;
 				break;
 			case RIGHT:
-				newposX++;
+				newposY = currposY + 1;
 				break;
 			}
 		}
-		Game.map[newposX][newposY].setVisible(true);
+		// if new Cell is Trap
+		if (Game.map[newposX][newposY] instanceof TrapCell) {
+			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
+		}
+		// if new Cell is collectible ( Vaccine or Supply)
+		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
+			//if the Collectible is Vaccine
+			if() {
 
+				this.vaccineInventory.add();
+			}
+			//if the Collectible is Supply
+			if() {
+				this.supplyInventory.add();
+			}
+
+		}
+
+		((CharacterCell) Game.map[currposX][currposY]).setCharacter(null);
+		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
+		this.lightenAdjCells();
+		// Game.map[newposX][newposY].setVisible(true);
 		actionsAvailable--;
 	}
 
