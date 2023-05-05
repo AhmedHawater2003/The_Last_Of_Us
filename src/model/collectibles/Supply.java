@@ -10,14 +10,13 @@ public class Supply implements Collectible {
 
 	@Override
 	public void pickUp(Hero h) {
-		// TODO Auto-generated method stub
+		h.getSupplyInventory().add(this);
 
 	}
 
 	@Override
 	public void use(Hero h) {
-		// TODO Auto-generated method stub
+		h.getSupplyInventory().remove(this);
 
 	}
-
 }

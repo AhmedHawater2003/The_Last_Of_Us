@@ -32,4 +32,9 @@ public class Zombie extends Character {
 		}
 	}
 
+	public void removeFromGame() {
+		Game.zombies.remove(this);
+		ZOMBIES_COUNT--;
+	}
+
 }

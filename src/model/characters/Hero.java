@@ -9,6 +9,7 @@ import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
+import model.world.*;
 
 public class Hero extends Character { // Should be abstract after testing
 	private int actionsAvailable;
@@ -42,10 +43,41 @@ public class Hero extends Character { // Should be abstract after testing
 		}
 	}
 
+	public void cure() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
+		if (this.getTarget() == null) {
+			throw new InvalidTargetException("No target to cure");
+		}
+		if (this.actionsAvailable <= 0) {
+			throw new NotEnoughActionsException("No actions available");
+		}
+		if (this.vaccineInventory.size() == 0) {
+			throw new NoAvailableResourcesException("No vaccines available");
+		}
+		if (!(this.getAdjLocations().contains(this.getTarget().getLocation()))) {
+			throw new InvalidTargetException("Target is not in range");
+		}
+		if (this.getTarget() instanceof Hero) {
+			throw new InvalidTargetException("A hero cannot cure another hero");
+		}
+		
+		// which vaccine to use?
+		this.vaccineInventory.get(0).use(this);
+		this.actionsAvailable--;
+
+	}
+
 	public void lightenAdjCells() {
 		for (Point p : this.getAdjLocations()) {
 			Game.map[p.x][p.y].setVisible(true);
 		}
+	}
+
+	public void addToControlable(Point p) {
+		Game.availableHeroes.remove(this);
+		this.setLocation(p);
+		((CharacterCell) Game.map[p.x][p.y]).setCharacter(this);
+		Game.heroes.add(this);
+		this.lightenAdjCells();
 	}
 
 	public int getActionsAvailable() {
@@ -86,18 +118,18 @@ public class Hero extends Character { // Should be abstract after testing
 			return;
 		} else {
 			switch (d) {
-			case UP:
-				newposY--;
-				break;
-			case DOWN:
-				newposY++;
-				break;
-			case LEFT:
-				newposX--;
-				break;
-			case RIGHT:
-				newposX++;
-				break;
+				case UP:
+					newposY--;
+					break;
+				case DOWN:
+					newposY++;
+					break;
+				case LEFT:
+					newposX--;
+					break;
+				case RIGHT:
+					newposX++;
+					break;
 			}
 		}
 		Game.map[newposX][newposY].setVisible(true);

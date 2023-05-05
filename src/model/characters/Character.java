@@ -55,11 +55,13 @@ public class Character { // Abstract class Again After testing
 	}
 
 	public void defend(Character c) {
-		if (c.currentHp < this.attackDmg / 2)
+		if (c.currentHp < this.attackDmg / 2){
 			c.currentHp = 0;
+			c.onCharacterDeath();
+		}
 		else
 			c.currentHp = c.currentHp - this.attackDmg / 2;
-		c.onCharacterDeath();
+		
 	}
 
 	public void onCharacterDeath() {

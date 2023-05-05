@@ -60,16 +60,10 @@ public class Game {
 		// Hero h2 = new Hero("h2", 100, 10, 10);
 		// h2.setLocation(new Point(2, 1));
 		// ((CharacterCell) map[2][1]).setCharacter(h2);
-		addHeroToControlable(firstHero, 0, 0);
+		firstHero.addToControlable(new Point(0, 0));
 	}
 
-	public static void addHeroToControlable(Hero hero, int x, int y) {
-		availableHeroes.remove(hero);
-		hero.setLocation(new Point(x, y));
-		((CharacterCell) map[x][y]).setCharacter(hero);
-		heroes.add(hero);
-		hero.lightenAdjCells();
-	}
+
 
 	public static void randomSpawning() {
 		spwaningRandomZombies();
@@ -149,6 +143,14 @@ public class Game {
 		int randomIndex = GameRandom.nextInt(freeCellsLocations.size());
 		Point location = freeCellsLocations.remove(randomIndex);
 		return location;
+	}
+
+	public static Hero getAnAvailaveHero(){
+		if (availableHeroes.isEmpty())
+			return null;
+		int randomIndex = GameRandom.nextInt(availableHeroes.size());
+		Hero hero = availableHeroes.remove(randomIndex);
+		return hero;
 	}
 
 }

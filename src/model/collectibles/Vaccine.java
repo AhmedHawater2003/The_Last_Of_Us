@@ -1,6 +1,8 @@
 package model.collectibles;
 
+import engine.Game;
 import model.characters.Hero;
+import model.characters.Zombie;
 
 public class Vaccine implements Collectible {
 
@@ -10,13 +12,17 @@ public class Vaccine implements Collectible {
 
 	@Override
 	public void pickUp(Hero h) {
-		// TODO Auto-generated method stub
+		h.getVaccineInventory().add(this);
 
 	}
 
 	@Override
 	public void use(Hero h) {
-		// TODO Auto-generated method stub
+		h.getVaccineInventory().remove(this);
+		Hero newHero = Game.getAnAvailaveHero();
+		Zombie curedZombie = (Zombie) h.getTarget();
+		curedZombie.removeFromGame();
+		newHero.addToControlable(curedZombie.getLocation());
 
 	}
 
