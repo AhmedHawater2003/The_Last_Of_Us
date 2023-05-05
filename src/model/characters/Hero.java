@@ -1,5 +1,6 @@
 package model.characters;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import engine.Game;
@@ -36,7 +37,15 @@ public class Hero extends Character { // Should be abstract after testing
 			throw new InvalidTargetException("A hero cannot attack another hero");
 		}
 		super.attack();
-		this.actionsAvailable--;
+		if (!(this instanceof Fighter && this.specialAction)) {
+			this.actionsAvailable--;
+		}
+	}
+
+	public void lightenAdjCells() {
+		for (Point p : this.getAdjLocations()) {
+			Game.map[p.x][p.y].setVisible(true);
+		}
 	}
 
 	public int getActionsAvailable() {

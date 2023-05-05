@@ -83,12 +83,16 @@ public class Character { // Abstract class Again After testing
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
 			zombies.remove((Zombie) character);
+			// TODO testZombieDeath Failure :(
+//			Point p = character.getLocation();
+//			((CharacterCell) Game.map[p.x][p.y]).setCharacter(null);
 			spawnZombie();
 		}
 	}
 
 	public void generateAdjLocations() {
 		this.adjLocations.clear();
+		this.adjLocations.add(this.location);
 		this.addMainAdjLocations();
 		this.addDiagonaAdjlCells();
 	}
