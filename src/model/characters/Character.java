@@ -54,9 +54,12 @@ public class Character { // Abstract class Again After testing
 		this.target = null;
 	}
 
-	public void defend(Character attacker) {
-		// TODO Auto-generated method stub
-
+	public void defend(Character c) {
+		if (c.currentHp < this.attackDmg / 2)
+			c.currentHp = 0;
+		else
+			c.currentHp = c.currentHp - this.attackDmg / 2;
+		c.onCharacterDeath();
 	}
 
 	public void onCharacterDeath() {

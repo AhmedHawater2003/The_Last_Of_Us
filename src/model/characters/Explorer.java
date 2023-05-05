@@ -10,7 +10,6 @@ public class Explorer extends Hero {
 
 	public void useSpecial() throws NoAvailableResourcesException {
 		super.useSpecial();
-
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				Game.map[i][j].setVisible(true);
