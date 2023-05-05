@@ -3,6 +3,11 @@ package model.world;
 import java.util.Random;
 
 public class TrapCell extends Cell {
+	@Override
+	public String toString() {
+		return "TrapCell [trapDamage=" + trapDamage + "]";
+	}
+
 	private int trapDamage; // Read Only
 
 	public TrapCell() {

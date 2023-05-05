@@ -17,6 +17,7 @@ public class Zombie extends Character {
 		setZombieTarget();
 		if (this.getTarget() == null)
 			return;
+		super.attack();
 	}
 
 	public void setZombieTarget() {

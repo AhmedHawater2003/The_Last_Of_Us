@@ -6,18 +6,128 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import model.characters.Hero;
-import model.characters.HeroType;
-import model.characters.Zombie;
+
+
+import model.characters.*;
+import model.collectibles.Supply;
+import model.collectibles.Vaccine;
 import model.world.Cell;
+import model.world.CharacterCell;
+import model.world.CollectibleCell;
+import model.world.TrapCell;;
 
 public class Game {
 	public static Random GameRandom = new Random();
-	public static Cell[][] map;
+	public static Cell[][] map = new Cell[15][15];
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
 	public static ArrayList<Point> freeCellsLocations = new ArrayList<Point>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+
+	public static void main(String[] args) throws IOException {
+		loadHeroes("Heros.csv");
+		startGame(availableHeroes.get(0));
+
+		/* Test 1
+		Character z = ((CharacterCell)map[6][2]).getCharacter();
+		Character h = ((CharacterCell)map[1][2]).getCharacter();
+		Character h2 = ((CharacterCell)map[2][1]).getCharacter();
+		try {
+			System.out.println(z.getCurrentHp());
+			h.setTarget(z);
+			h2.setTarget(z);
+			h.attack();
+			h2.attack();
+			System.out.println(z.getCurrentHp());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		*/
+
+		/* Test 2 		
+		System.out.println(availableHeroes);
+		System.out.println(heroes.get(0).getLocation());
+		System.out.println(((CharacterCell) map[0][0]).getCharacter());
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map.length; j++) {
+				System.out.println("( " + i + ", " + j + " )" + " -> " + map[i][j]);
+			}
+		} 
+		*/
+
+	}
+
+	public static void startGame(Hero firstHero) throws IOException {
+		preInitialization();
+		randomSpawning();
+		// Zombie z = new Zombie();
+		// z.setLocation(new Point(6, 2));
+		// ((CharacterCell) map[6][2]).setCharacter(z);
+		// Hero h = new Hero("h", 100, 10, 10);
+		// h.setLocation(new Point(1, 2));
+		// ((CharacterCell) map[1][2]).setCharacter(h);
+		// Hero h2 = new Hero("h2", 100, 10, 10);
+		// h2.setLocation(new Point(2, 1));
+		// ((CharacterCell) map[2][1]).setCharacter(h2);
+		addHeroToControlable(firstHero, 0, 0);
+	}
+
+	public static void addHeroToControlable(Hero hero, int x, int y) {
+		availableHeroes.remove(hero);
+		hero.setLocation(new Point(x, y));
+		((CharacterCell) map[x][y]).setCharacter(hero);
+		heroes.add(hero);
+	}
+
+	public static void randomSpawning() {
+		spwaningRandomZombies();
+		spawningRandomSupplies();
+		spawningRandomVaccines();
+		spawningRandomTraps();
+	}
+
+	public static void spwaningRandomZombies() {
+		for (int i = 0; i < 10; i++) {
+			Point randomPoint = getFreeCellLocation(); // handles removing the point from the list
+			Zombie newZombie = new Zombie();
+			newZombie.setLocation(randomPoint);
+			((CharacterCell) map[randomPoint.x][randomPoint.y]).setCharacter(newZombie);
+			zombies.add(newZombie);
+		}
+	}
+
+	public static void spawningRandomVaccines() {
+		for (int i = 0; i < 5; i++) {
+			Point randomPoint = getFreeCellLocation();
+			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Vaccine());
+		}
+	}
+
+	public static void spawningRandomSupplies() {
+		for (int i = 0; i < 5; i++) {
+			Point randomPoint = getFreeCellLocation();
+			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Supply());
+		}
+	}
+
+	public static void spawningRandomTraps() {
+		for (int i = 0; i < 5; i++) {
+			Point randomPoint = getFreeCellLocation();
+			map[randomPoint.x][randomPoint.y] = new TrapCell();
+		}
+	}
+
+	// assign each cell to a new CharacterCell object and populate
+	// freeCellsLocations
+	public static void preInitialization() {
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map.length; j++) {
+				map[i][j] = new CharacterCell(null);
+				if (!(i == 0 && j == 0))
+					freeCellsLocations.add(new Point(i, j));
+			}
+		}
+	}
 
 	public static void loadHeroes(String filePath) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(filePath));

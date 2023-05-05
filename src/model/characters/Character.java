@@ -17,20 +17,19 @@ public class Character { // Abstract class Again After testing
 	private Character target;
 
 	public static void main(String[] args) {
-		// Hero h = new Hero("h", 100, 10, 2);
-		// Zombie z = new Zombie();
-		// h.setTarget(z);
-		// try{
-		// h.attack();
-		// System.out.println(z.getCurrentHp());
-		// }
-		// catch(Exception e){
-		// System.out.println(e.getMessage());
-		// }
-		Character c = new Character();
-		c.setLocation(new Point(3, 3));
-		c.generateAdjLocations();
-
+		Hero h = new Hero("h", 100, 10, 2);
+		Hero h2 = new Hero("h", 100, 10, 2);
+		Zombie z = new Zombie();
+		z.setLocation(new Point(2, 2));
+		h.setLocation(new Point(2, 1));
+		h2.setLocation(new Point(1, 2));
+		try {
+			z.attack();
+			System.out.println(h.getCurrentHp());
+			System.out.println(h2.getCurrentHp());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public Character(String name, int maxHp, int attackDmg) {
@@ -51,8 +50,7 @@ public class Character { // Abstract class Again After testing
 		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 		this.target.defend(this);
 		if (this.target.getCurrentHp() == 0)
-			this.target.onCharacrerDeath();
-
+			this.target.onCharacterDeath();
 		this.target = null;
 	}
 
@@ -61,17 +59,29 @@ public class Character { // Abstract class Again After testing
 
 	}
 
-	public void onCharacrerDeath() {
-		// TODO Auto-generated method stub
-
+	public void onCharacterDeath() {
+		if (this.getCurrentHp() <= 0) {
+			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
+			Game.freeCellsLocations.add(this.getLocation());
+			removeCharacter(this, Game.heroes, Game.zombies);
+		}
 	}
 
-	public HashSet<Point> getAdjLocations() {
-		return adjLocations;
+	public void spawnZombie() {
+		Zombie SpawnedZombie = new Zombie();
+		if (Game.getFreeCellLocation() == null) {
+			return;
+		}
+		((CharacterCell) Game.map[location.x][location.y]).setCharacter(SpawnedZombie);
 	}
 
-	public void setAdjLocations(HashSet<Point> adjLocations) {
-		this.adjLocations = adjLocations;
+	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
+		if (character instanceof Hero) {
+			heroes.remove((Hero) character);
+		} else if (character instanceof Zombie) {
+			zombies.remove((Zombie) character);
+			spawnZombie();
+		}
 	}
 
 	public void generateAdjLocations() {
@@ -99,6 +109,19 @@ public class Character { // Abstract class Again After testing
 					this.adjLocations.add(new Point(location.x + i, location.y + j));
 			}
 		}
+	}
+
+	public HashSet<Point> getAdjLocations() {
+		return adjLocations;
+	}
+
+	public void setAdjLocations(HashSet<Point> adjLocations) {
+		this.adjLocations = adjLocations;
+	}
+
+	@Override
+	public String toString() {
+		return "Character [name=" + name + "]";
 	}
 
 	public Point getLocation() {
@@ -143,28 +166,4 @@ public class Character { // Abstract class Again After testing
 		return attackDmg;
 	}
 
-	public void onCharacterDeath() {
-		if (this.getCurrentHp() <= 0) {
-			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
-			Game.freeCellsLocations.add(this.getLocation());
-			removeCharacter(this, Game.heroes, Game.zombies);
-		}
-	}
-
-	public void spawnZombie() {
-		Zombie SpawnedZombie = new Zombie();
-		if (Game.getFreeCellLocation() == null) {
-			return;
-		}
-		((CharacterCell) Game.map[location.x][location.y]).setCharacter(SpawnedZombie);
-	}
-
-	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
-		if (character instanceof Hero) {
-			heroes.remove((Hero) character);
-		} else if (character instanceof Zombie) {
-			zombies.remove((Zombie) character);
-			spawnZombie();
-		}
-	}
 }

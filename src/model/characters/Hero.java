@@ -35,6 +35,7 @@ public class Hero extends Character { // Should be abstract after testing
 			throw new InvalidTargetException("A hero cannot attack another hero");
 		}
 		super.attack();
+		this.actionsAvailable--;
 	}
 
 	public int getActionsAvailable() {

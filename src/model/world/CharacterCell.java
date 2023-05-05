@@ -27,6 +27,11 @@ public class CharacterCell extends Cell {
 		return isSafe;
 	}
 
+	@Override
+	public String toString() {
+		return "CharacterCell [character=" + character + "]";
+	}
+
 	public void setSafe(boolean isSafe) {
 		this.isSafe = isSafe;
 	}
