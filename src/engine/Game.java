@@ -152,11 +152,11 @@ public class Game {
 		return hero;
 	}
 
-	public static boolean checkWin() {
-		if (heroes.size() >= 5 && AllVaccineUsed()) {
-			return true;
-		}
-		return false;
-	}
+	// public static boolean checkWin() {
+	// if (heroes.size() >= 5 && AllVaccineUsed()) {
+	// return true;
+	// }
+	// return false;
+	// }
 
 }

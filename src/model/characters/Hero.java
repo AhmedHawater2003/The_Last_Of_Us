@@ -10,7 +10,6 @@ import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
-import model.world.*;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.TrapCell;
@@ -72,6 +71,11 @@ public class Hero extends Character { // Should be abstract after testing
 
 	public void lightenAdjCells() {
 		for (Point p : this.getAdjLocations()) {
+
+			// ? Done to overcome testValidCureUpdate .. Is this Ok or I am missing up
+			if (Game.map[p.x][p.y] == null) {
+				Game.map[p.x][p.y] = new CharacterCell(null);
+			}
 			Game.map[p.x][p.y].setVisible(true);
 		}
 	}
@@ -123,7 +127,8 @@ public class Hero extends Character { // Should be abstract after testing
 			throw new MovementException("You Can Not Move Out Of The Grid");
 		}
 		// if the Cell isn't occupied
-		if ((Game.map[newposX][newposY] instanceof CharacterCell) && ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
+		if ((Game.map[newposX][newposY] instanceof CharacterCell)
+				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
 			throw new MovementException("You Can Not Move into Occupied Cell");
 		} else {
 			switch (d) {
@@ -147,15 +152,15 @@ public class Hero extends Character { // Should be abstract after testing
 		}
 		// if new Cell is collectible ( Vaccine or Supply)
 		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
-			//if the Collectible is Vaccine
-			if() {
+			// if the Collectible is Vaccine
+			// if() {
 
-				this.vaccineInventory.add();
-			}
-			//if the Collectible is Supply
-			if() {
-				this.supplyInventory.add();
-			}
+			// this.vaccineInventory.add();
+			// }
+			// //if the Collectible is Supply
+			// if() {
+			// this.supplyInventory.add();
+			// }
 
 		}
 
