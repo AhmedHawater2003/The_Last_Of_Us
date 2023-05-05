@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import engine.Game;
 import exceptions.InvalidTargetException;
+import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
@@ -93,6 +94,14 @@ public class Hero extends Character { // Should be abstract after testing
 		Game.map[newposX][newposY].setVisible(true);
 
 		actionsAvailable--;
+	}
+
+	public void useSpecial() throws NoAvailableResourcesException {
+		if (this.supplyInventory.isEmpty()) {
+			throw new NoAvailableResourcesException("NoAvailableResourcesException");
+		}
+		this.supplyInventory.remove(0);
+		this.setSpecialAction(true);
 	}
 
 }
