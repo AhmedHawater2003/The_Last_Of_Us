@@ -18,6 +18,7 @@ import model.world.CollectibleCell;
 import model.world.TrapCell;;
 
 public class Game {
+
 	public static Random GameRandom = new Random();
 	public static Cell[][] map = new Cell[15][15];
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
@@ -62,8 +63,6 @@ public class Game {
 		// ((CharacterCell) map[2][1]).setCharacter(h2);
 		firstHero.addToControlable(new Point(0, 0));
 	}
-
-
 
 	public static void randomSpawning() {
 		spwaningRandomZombies();
@@ -145,12 +144,19 @@ public class Game {
 		return location;
 	}
 
-	public static Hero getAnAvailaveHero(){
+	public static Hero getAnAvailaveHero() {
 		if (availableHeroes.isEmpty())
 			return null;
 		int randomIndex = GameRandom.nextInt(availableHeroes.size());
 		Hero hero = availableHeroes.remove(randomIndex);
 		return hero;
+	}
+
+	public static boolean checkWin() {
+		if (heroes.size() >= 5 && AllVaccineUsed()) {
+			return true;
+		}
+		return false;
 	}
 
 }
