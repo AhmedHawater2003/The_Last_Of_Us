@@ -74,7 +74,7 @@ public class Character { // Abstract class Again After testing
 
 	public void spawnZombie() {
 		Zombie SpawnedZombie = new Zombie();
-		if (Game.getFreeCellLocation() == null) {
+		if (Game.getAFreeCellLocation() == null) {
 			return;
 		}
 		((CharacterCell) Game.map[location.x][location.y]).setCharacter(SpawnedZombie);

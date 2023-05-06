@@ -73,7 +73,7 @@ public class Game {
 
 	public static void spwaningRandomZombies() {
 		for (int i = 0; i < 10; i++) {
-			Point randomPoint = getFreeCellLocation(); // handles removing the point from the list
+			Point randomPoint = getAFreeCellLocation(); // handles removing the point from the list
 			Zombie newZombie = new Zombie();
 			newZombie.setLocation(randomPoint);
 			((CharacterCell) map[randomPoint.x][randomPoint.y]).setCharacter(newZombie);
@@ -83,21 +83,21 @@ public class Game {
 
 	public static void spawningRandomVaccines() {
 		for (int i = 0; i < 5; i++) {
-			Point randomPoint = getFreeCellLocation();
+			Point randomPoint = getAFreeCellLocation();
 			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Vaccine());
 		}
 	}
 
 	public static void spawningRandomSupplies() {
 		for (int i = 0; i < 5; i++) {
-			Point randomPoint = getFreeCellLocation();
+			Point randomPoint = getAFreeCellLocation();
 			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Supply());
 		}
 	}
 
 	public static void spawningRandomTraps() {
 		for (int i = 0; i < 5; i++) {
-			Point randomPoint = getFreeCellLocation();
+			Point randomPoint = getAFreeCellLocation();
 			map[randomPoint.x][randomPoint.y] = new TrapCell();
 		}
 	}
@@ -136,7 +136,7 @@ public class Game {
 
 	}
 
-	public static Point getFreeCellLocation() {
+	public static Point getAFreeCellLocation() {
 		if (freeCellsLocations.isEmpty())
 			return null;
 		int randomIndex = GameRandom.nextInt(freeCellsLocations.size());

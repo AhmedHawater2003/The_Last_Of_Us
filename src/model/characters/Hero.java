@@ -63,7 +63,7 @@ public class Hero extends Character { // Should be abstract after testing
 			throw new InvalidTargetException("A hero cannot cure another hero");
 		}
 
-		// which vaccine to use?
+		// ? which vaccine to use?
 		this.vaccineInventory.get(0).use(this);
 		this.actionsAvailable--;
 
@@ -132,18 +132,18 @@ public class Hero extends Character { // Should be abstract after testing
 			throw new MovementException("You Can Not Move into Occupied Cell");
 		} else {
 			switch (d) {
-				case UP:
-					newposX = currposX + 1;
-					break;
-				case DOWN:
-					newposX = currposX - 1;
-					break;
-				case LEFT:
-					newposY = currposY - 1;
-					break;
-				case RIGHT:
-					newposY = currposY + 1;
-					break;
+			case UP:
+				newposX = currposX + 1;
+				break;
+			case DOWN:
+				newposX = currposX - 1;
+				break;
+			case LEFT:
+				newposY = currposY - 1;
+				break;
+			case RIGHT:
+				newposY = currposY + 1;
+				break;
 			}
 		}
 		// if new Cell is Trap
@@ -171,7 +171,7 @@ public class Hero extends Character { // Should be abstract after testing
 		actionsAvailable--;
 	}
 
-	public void useSpecial() throws NoAvailableResourcesException {
+	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
 		if (this.supplyInventory.isEmpty()) {
 			throw new NoAvailableResourcesException("NoAvailableResourcesException");
 		}
