@@ -8,6 +8,7 @@ import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
+import model.collectibles.Collectible;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
@@ -69,14 +70,14 @@ public class Hero extends Character { // Should be abstract after testing
 
 	}
 
-	public void lightenAdjCells() {
+	public void setAdjCellsVisiblity(boolean visible) {
 		for (Point p : this.getAdjLocations()) {
 
 			// ? Done to overcome testValidCureUpdate .. Is this Ok or I am missing up
 			if (Game.map[p.x][p.y] == null) {
 				Game.map[p.x][p.y] = new CharacterCell(null);
 			}
-			Game.map[p.x][p.y].setVisible(true);
+			Game.map[p.x][p.y].setVisible(visible);
 		}
 	}
 
@@ -85,7 +86,7 @@ public class Hero extends Character { // Should be abstract after testing
 		this.setLocation(p);
 		((CharacterCell) Game.map[p.x][p.y]).setCharacter(this);
 		Game.heroes.add(this);
-		this.lightenAdjCells();
+		this.setAdjCellsVisiblity(true);
 	}
 
 	public int getActionsAvailable() {
@@ -116,20 +117,41 @@ public class Hero extends Character { // Should be abstract after testing
 		return supplyInventory;
 	}
 
-	public void move(Direction d) throws MovementException {
+	public void move(Direction d) throws MovementException, NotEnoughActionsException {
+		if (this.actionsAvailable <= 0) {
+			throw new NotEnoughActionsException();
+		}
 		Point currpos = this.getLocation();
 		int currposX = currpos.x;
 		int currposY = currpos.y;
-		int newposX = 0;
-		int newposY = 0;
-		// if the cell isn't out-of grid
+		int newposX = currposX;
+		int newposY = currposY;
+		switch (d) {
+		case UP:
+			newposX = currposX + 1;
+			break;
+		case DOWN:
+			newposX = currposX - 1;
+			break;
+		case LEFT:
+			newposY = currposY - 1;
+			break;
+		case RIGHT:
+			newposY = currposY + 1;
+			break;
+		}
+		if (Game.map[newposX][newposY] == null) {
+			Game.map[newposX][newposY] = new CharacterCell(null);
+		}
+		// if the cell is out-of grid
 		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
 			throw new MovementException("You Can Not Move Out Of The Grid");
 		}
-		// if the Cell isn't occupied
+		// if the Cell is occupied
 		if ((Game.map[newposX][newposY] instanceof CharacterCell)
 				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
 			throw new MovementException("You Can Not Move into Occupied Cell");
+
 		} else {
 			switch (d) {
 			case UP:
@@ -145,29 +167,29 @@ public class Hero extends Character { // Should be abstract after testing
 				newposY = currposY + 1;
 				break;
 			}
+
 		}
 		// if new Cell is Trap
 		if (Game.map[newposX][newposY] instanceof TrapCell) {
 			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
+			Game.map[newposX][newposY] = new CharacterCell(null);
 		}
 		// if new Cell is collectible ( Vaccine or Supply)
 		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
 			// if the Collectible is Vaccine
-			// if() {
-
-			// this.vaccineInventory.add();
-			// }
-			// //if the Collectible is Supply
-			// if() {
-			// this.supplyInventory.add();
-			// }
-
+			if ((Collectible) Game.map[newposX][newposY] instanceof Vaccine) {
+				((Collectible) Game.map[newposX][newposY]).pickUp(this);
+				Game.map[newposX][newposY] = new CharacterCell(null);
+			}
+			// if the Collectible is Supply
+			if ((Collectible) Game.map[newposX][newposY] instanceof Supply) {
+				((Collectible) Game.map[newposX][newposY]).pickUp(this);
+				Game.map[newposX][newposY] = new CharacterCell(null);
+			}
 		}
-
-		((CharacterCell) Game.map[currposX][currposY]).setCharacter(null);
 		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
-		this.lightenAdjCells();
-		// Game.map[newposX][newposY].setVisible(true);
+		((CharacterCell) Game.map[currposX][currposY]).setCharacter(null);
+		this.setAdjCellsVisiblity(true);
 		actionsAvailable--;
 	}
 

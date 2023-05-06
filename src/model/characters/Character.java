@@ -49,47 +49,59 @@ public class Character { // Abstract class Again After testing
 		}
 		this.target.setCurrentHp(this.target.getCurrentHp() - this.attackDmg);
 		this.target.defend(this);
-		if (this.target.getCurrentHp() == 0)
+		if (this.target.getCurrentHp() <= 0) {
 			this.target.onCharacterDeath();
-		this.target = null;
+			this.target = null;
+		}
+
 	}
 
 	public void defend(Character c) {
-		if (c.currentHp < this.attackDmg / 2){
+		if (c.currentHp < this.attackDmg / 2) {
 			c.currentHp = 0;
 			c.onCharacterDeath();
-		}
-		else
+		} else
 			c.currentHp = c.currentHp - this.attackDmg / 2;
-		
+
 	}
 
 	public void onCharacterDeath() {
 		if (this.getCurrentHp() <= 0) {
 			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
-			Game.freeCellsLocations.add(this.getLocation());
+			// Game.freeCellsLocations.add(this.getLocation());
 			removeCharacter(this, Game.heroes, Game.zombies);
 		}
 	}
 
 	public void spawnZombie() {
-		Zombie SpawnedZombie = new Zombie();
+
+		// Zombie SpawnedZombie = new Zombie();
 		if (Game.getAFreeCellLocation() == null) {
-			return;
+
+			Zombie spawnedZombie = new Zombie();
+			if (Game.freeCellsLocations.isEmpty()) {
+
+				return;
+			}
+			Point freeLocation = Game.getAFreeCellLocation();
+			spawnedZombie.setLocation(freeLocation);
+			((CharacterCell) Game.map[freeLocation.x][freeLocation.y]).setCharacter(spawnedZombie);
 		}
-		((CharacterCell) Game.map[location.x][location.y]).setCharacter(SpawnedZombie);
 	}
 
 	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
 		if (character instanceof Hero) {
+			Game.freeCellsLocations.add(this.getLocation());
+			((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
-			zombies.remove((Zombie) character);
-
-			// TODO testZombieDeath Failure :(
+			Game.deadZombieLocations.add(this.getLocation());
+			((Zombie) character).removeFromGame();
+			spawnZombie();
+// TODO testZombieDeath Failure :(
 //			Point p = character.getLocation();
 //			((CharacterCell) Game.map[p.x][p.y]).setCharacter(null);
-			spawnZombie();
+
 		}
 	}
 

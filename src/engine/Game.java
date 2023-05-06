@@ -15,7 +15,7 @@ import model.collectibles.Vaccine;
 import model.world.Cell;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
-import model.world.TrapCell;;
+import model.world.TrapCell;
 
 public class Game {
 
@@ -23,6 +23,7 @@ public class Game {
 	public static Cell[][] map = new Cell[15][15];
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
 	public static ArrayList<Point> freeCellsLocations = new ArrayList<Point>();
+	public static ArrayList<Point> deadZombieLocations = new ArrayList<Point>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
@@ -47,6 +48,14 @@ public class Game {
 		 * System.out.println("( " + i + ", " + j + " )" + " -> " + map[i][j]); } }
 		 */
 
+	}
+
+	public static void endTurn() {
+
+	}
+
+	public static boolean checkGameOver() {
+		return true;
 	}
 
 	public static void startGame(Hero firstHero) throws IOException {
@@ -159,4 +168,14 @@ public class Game {
 	// return false;
 	// }
 
+	public static boolean checkWin() {
+		if (heroes.size() >= 5 && AllVaccineUsed()) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean AllVaccineUsed() {
+		return true;
+	}
 }

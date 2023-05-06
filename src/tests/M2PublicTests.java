@@ -2240,10 +2240,25 @@ public class M2PublicTests {
 			fail(e.getCause().getClass() + " occurred while trying to get Map variable from the Game Class");
 		}
 
+		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter().getLocation());
+		int c = 0;
+		int n = 0;
+		for (Cell[] row : tmpMap) {
+			for (Cell ahmedCell : row) {
+				if (ahmedCell instanceof CharacterCell && ((CharacterCell) ahmedCell).getCharacter() == null)
+					c++;
+			}
+		}
+		System.out.println(c);
+
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
+//		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter().getLocation());
+//		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter());
+
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
+
 		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
 		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
 				true);
