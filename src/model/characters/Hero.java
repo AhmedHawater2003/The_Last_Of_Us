@@ -70,6 +70,12 @@ public class Hero extends Character { // Should be abstract after testing
 
 	}
 
+	public void resetVariables() {
+		this.setTarget(null);
+		this.setActionsAvailable(this.maxActions);
+		this.specialAction = false;
+	}
+
 	public void setAdjCellsVisiblity(boolean visible) {
 		for (Point p : this.getAdjLocations()) {
 

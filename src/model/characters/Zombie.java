@@ -24,10 +24,8 @@ public class Zombie extends Character {
 	}
 
 	public void setZombieTarget() {
+		this.generateAdjLocations();
 		for (Point p : this.getAdjLocations()) {
-//			if (Game.map[p.x][p.y] == null) {
-//				Game.map[p.x][p.y] = new CharacterCell(null);
-//			}
 			Cell atPoint = Game.map[p.x][p.y];
 			if (atPoint instanceof CharacterCell) {
 				if (((CharacterCell) atPoint).getCharacter() instanceof Hero) {
@@ -40,7 +38,6 @@ public class Zombie extends Character {
 
 	public void removeFromGame() {
 		Game.zombies.remove(this);
-		ZOMBIES_COUNT--;
 	}
 
 }

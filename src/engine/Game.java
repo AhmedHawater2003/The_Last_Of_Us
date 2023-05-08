@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
+import model.characters.Character;
 import model.characters.Hero;
 import model.characters.HeroType;
 import model.characters.Zombie;
@@ -51,22 +54,39 @@ public class Game {
 
 	}
 
-	public static void endTurn() {
+	public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
+		setAllCellsVisibility(false);
+		for (Hero h : heroes) {
+			h.resetVariables();
+			h.generateAdjLocations();
+			h.setAdjCellsVisiblity(true);
+		}
+		for (Zombie z : zombies) {
+			try {
+				z.attack();
+			} catch (Exception e) { // Tests want to catch errors here
+				System.out.println("An Exceptions was thrown when a zombie tried to attack : " + e.getMessage());
+			}
+			z.setTarget(null);
+		}
+		// TODO spawinZombie should be in the Zombie class
+		Character.spawnZombie();
+	}
 
+	public static void setAllCellsVisibility(boolean isVisible) {
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (map[i][j] == null) {
+					map[i][j] = new CharacterCell(null);
+				}
+				map[i][j].setVisible(isVisible);
+			}
+		}
 	}
 
 	public static void startGame(Hero firstHero) throws IOException {
 		preInitialization();
 		randomSpawning();
-		// Zombie z = new Zombie();
-		// z.setLocation(new Point(6, 2));
-		// ((CharacterCell) map[6][2]).setCharacter(z);
-		// Hero h = new Hero("h", 100, 10, 10);
-		// h.setLocation(new Point(1, 2));
-		// ((CharacterCell) map[1][2]).setCharacter(h);
-		// Hero h2 = new Hero("h2", 100, 10, 10);
-		// h2.setLocation(new Point(2, 1));
-		// ((CharacterCell) map[2][1]).setCharacter(h2);
 		firstHero.addToControlable(new Point(0, 0));
 	}
 
@@ -157,13 +177,6 @@ public class Game {
 		Hero hero = availableHeroes.remove(randomIndex);
 		return hero;
 	}
-
-	// public static boolean checkWin() {
-	// if (heroes.size() >= 5 && AllVaccineUsed()) {
-	// return true;
-	// }
-	// return false;
-	// }
 
 	public static boolean checkWin() {
 		if (!AllVaccinesCollected())

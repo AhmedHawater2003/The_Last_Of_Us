@@ -1875,15 +1875,21 @@ public class M2PublicTests {
 			}
 		}
 
+		System.out.println("Number of heroes before ending the turn 8 time = " + heroList.size());
+
 		for (int i = 0; i < 8; i++) {
 
 			try {
 				Method endTurn = gameClass.getMethod("endTurn");
 				endTurn.invoke(gameClass);
 			} catch (Exception e) {
-				fail(e.getCause().getClass() + " ccuered while trying to end turn, check the Zombies attack!");
+				System.out.println(e);
+				fail(e.getCause().getClass() + " occuered while trying to end turn, check the Zombies attack!");
+
 			}
 		}
+
+		System.out.println("Number of heroes after ending the turn 8 time = " + heroList.size());
 
 		boolean isAllDead = heroList.size() <= 1;
 
@@ -2240,17 +2246,6 @@ public class M2PublicTests {
 		} catch (Exception e) {
 			fail(e.getCause().getClass() + " occurred while trying to get Map variable from the Game Class");
 		}
-
-		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter().getLocation());
-		int c = 0;
-		int n = 0;
-		for (Cell[] row : tmpMap) {
-			for (Cell ahmedCell : row) {
-				if (ahmedCell instanceof CharacterCell && ((CharacterCell) ahmedCell).getCharacter() == null)
-					c++;
-			}
-		}
-		System.out.println(c);
 
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);

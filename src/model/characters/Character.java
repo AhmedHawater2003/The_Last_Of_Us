@@ -73,17 +73,11 @@ public class Character { // Abstract class Again After testing
 		}
 	}
 
-	public void spawnZombie() {
-
-		// Zombie SpawnedZombie = new Zombie();
-		if (Game.getAFreeCellLocation() == null) {
-
+	public static void spawnZombie() {
+		Point freeLocation = Game.getAFreeCellLocation();
+		if (freeLocation != null) {
 			Zombie spawnedZombie = new Zombie();
-			if (Game.freeCellsLocations.isEmpty()) {
-
-				return;
-			}
-			Point freeLocation = Game.getAFreeCellLocation();
+			Game.zombies.add(spawnedZombie);
 			spawnedZombie.setLocation(freeLocation);
 			((CharacterCell) Game.map[freeLocation.x][freeLocation.y]).setCharacter(spawnedZombie);
 		}
@@ -98,10 +92,6 @@ public class Character { // Abstract class Again After testing
 			Game.deadZombieLocations.add(this.getLocation());
 			((Zombie) character).removeFromGame();
 			spawnZombie();
-// TODO testZombieDeath Failure :(
-//			Point p = character.getLocation();
-//			((CharacterCell) Game.map[p.x][p.y]).setCharacter(null);
-
 		}
 	}
 
