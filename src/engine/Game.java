@@ -34,6 +34,7 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
+		System.out.println(AllVaccinesCollected());
 
 		/*
 		 * Test 1 Character z = ((CharacterCell)map[6][2]).getCharacter(); Character h =
@@ -70,6 +71,8 @@ public class Game {
 			z.setTarget(null);
 		}
 		// TODO spawinZombie should be in the Zombie class
+		freeCellsLocations.addAll(deadZombieLocations);
+		deadZombieLocations.clear();
 		Character.spawnZombie();
 	}
 
@@ -85,9 +88,18 @@ public class Game {
 	}
 
 	public static void startGame(Hero firstHero) throws IOException {
+		clearingGameLists();
 		preInitialization();
 		randomSpawning();
 		firstHero.addToControlable(new Point(0, 0));
+	}
+
+	public static void clearingGameLists() {
+		availableHeroes.clear();
+		heroes.clear();
+		zombies.clear();
+		freeCellsLocations.clear();
+		deadZombieLocations.clear();
 	}
 
 	public static void randomSpawning() {
@@ -193,8 +205,8 @@ public class Game {
 				if (Game.map[i][j] == null) {
 					Game.map[i][j] = new CharacterCell(null);
 				}
-				if (map[i][j] instanceof Collectible) {
-					if ((Collectible) Game.map[i][j] instanceof Vaccine)
+				if (map[i][j] instanceof CollectibleCell) {
+					if (((CollectibleCell) Game.map[i][j]).getCollectible() instanceof Vaccine)
 						return false;
 				}
 			}

@@ -1130,7 +1130,6 @@ public class M2PublicTests {
 			Cell cell = m[4][4];
 			Method isVisible = cell.getClass().getMethod("isVisible");
 			boolean visible = (boolean) isVisible.invoke(cell);
-			System.out.println(visible);
 
 			assertTrue("The visibility of cells should not be updated as the hero is dead. Expected visibility = true"
 					+ " but was false ", false == visible);
@@ -1840,14 +1839,14 @@ public class M2PublicTests {
 		}
 
 		Iterator<Zombie> iterator = zombieList.iterator();
-
 		while (iterator.hasNext()) {
 
 			Zombie z = iterator.next();
 
 			if (!z.equals((Zombie) character2)) {
 				Point locationZ = z.getLocation();
-
+				if (!(Game.map[locationZ.x][locationZ.y] instanceof CharacterCell))
+					System.out.println("testZombieAttackDirections : " + locationZ.x + "  " + locationZ.y);
 				((CharacterCell) Game.map[locationZ.x][locationZ.y]).setCharacter(null);
 				iterator.remove();
 			}
@@ -1875,7 +1874,7 @@ public class M2PublicTests {
 			}
 		}
 
-		System.out.println("Number of heroes before ending the turn 8 time = " + heroList.size());
+//		System.out.println("Number of heroes before ending the turn 8 time = " + heroList.size());
 
 		for (int i = 0; i < 8; i++) {
 
@@ -1889,7 +1888,7 @@ public class M2PublicTests {
 			}
 		}
 
-		System.out.println("Number of heroes after ending the turn 8 time = " + heroList.size());
+//		System.out.println("Number of heroes after ending the turn 8 time = " + heroList.size());
 
 		boolean isAllDead = heroList.size() <= 1;
 
@@ -2249,9 +2248,6 @@ public class M2PublicTests {
 
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
-
-//		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter().getLocation());
-//		System.out.println(((CharacterCell) tmpMap[1][1]).getCharacter());
 
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
 
