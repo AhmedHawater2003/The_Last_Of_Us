@@ -55,10 +55,6 @@ public class Game {
 
 	}
 
-	public static boolean checkGameOver() {
-		return true;
-	}
-
 	public static void startGame(Hero firstHero) throws IOException {
 		preInitialization();
 		randomSpawning();
@@ -185,7 +181,6 @@ public class Game {
 				if (map[i][j] instanceof Collectible) {
 					if ((Collectible) Game.map[i][j] instanceof Vaccine)
 						return false;
-					return true;
 				}
 			}
 		}
@@ -198,5 +193,16 @@ public class Game {
 				return false;
 		}
 		return true;
+	}
+
+	public static boolean checkGameOver() {
+		if (heroes.isEmpty() && !AllVaccinesCollected())
+			return true;
+		if (availableHeroes.isEmpty() && AllVaccinesCollected())
+			return true;
+		if (heroes.size() < 5)
+			if (AllVaccinesCollected() && HeroUsedAllVaccines(heroes))
+				return true;
+		return false;
 	}
 }
