@@ -166,6 +166,8 @@ public class Game {
 	// }
 
 	public static boolean checkWin() {
+		if (!AllVaccinesCollected())
+			return false;
 		if (heroes.size() >= 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes)) {
 			return true;
 		}
@@ -173,8 +175,8 @@ public class Game {
 	}
 
 	public static boolean AllVaccinesCollected() {
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map.length; j++) {
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
 				if (Game.map[i][j] == null) {
 					Game.map[i][j] = new CharacterCell(null);
 				}
@@ -196,7 +198,14 @@ public class Game {
 	}
 
 	public static boolean checkGameOver() {
-		if (heroes.isEmpty() && !AllVaccinesCollected())
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (map[i][j] instanceof Collectible)
+					if ((Collectible) Game.map[i][j] instanceof Vaccine)
+						return false;
+			}
+		}
+		if (heroes.isEmpty())
 			return true;
 		if (availableHeroes.isEmpty() && AllVaccinesCollected())
 			return true;
