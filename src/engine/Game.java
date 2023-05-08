@@ -10,6 +10,7 @@ import java.util.Random;
 import model.characters.Hero;
 import model.characters.HeroType;
 import model.characters.Zombie;
+import model.collectibles.Collectible;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.Cell;
@@ -169,13 +170,33 @@ public class Game {
 	// }
 
 	public static boolean checkWin() {
-		if (heroes.size() >= 5 && AllVaccineUsed()) {
+		if (heroes.size() >= 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean AllVaccineUsed() {
+	public static boolean AllVaccinesCollected() {
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map.length; j++) {
+				if (Game.map[i][j] == null) {
+					Game.map[i][j] = new CharacterCell(null);
+				}
+				if (map[i][j] instanceof Collectible) {
+					if ((Collectible) Game.map[i][j] instanceof Vaccine)
+						return false;
+					return true;
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean HeroUsedAllVaccines(ArrayList<Hero> heroes) {
+		for (Hero hero : heroes) {
+			if (!hero.getVaccineInventory().isEmpty())
+				return false;
+		}
 		return true;
 	}
 }

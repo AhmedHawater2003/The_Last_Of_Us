@@ -121,6 +121,10 @@ public class Hero extends Character { // Should be abstract after testing
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException();
 		}
+		if (this.getCurrentHp() <= 0) {
+			this.onCharacterDeath();
+			return;
+		}
 		Point currpos = this.getLocation();
 		int currposX = currpos.x;
 		int currposY = currpos.y;
@@ -151,23 +155,6 @@ public class Hero extends Character { // Should be abstract after testing
 		if ((Game.map[newposX][newposY] instanceof CharacterCell)
 				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
 			throw new MovementException("You Can Not Move into Occupied Cell");
-
-		} else {
-			switch (d) {
-			case UP:
-				newposX = currposX + 1;
-				break;
-			case DOWN:
-				newposX = currposX - 1;
-				break;
-			case LEFT:
-				newposY = currposY - 1;
-				break;
-			case RIGHT:
-				newposY = currposY + 1;
-				break;
-			}
-
 		}
 		// if new Cell is Trap
 		if (Game.map[newposX][newposY] instanceof TrapCell) {
