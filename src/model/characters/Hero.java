@@ -8,7 +8,6 @@ import exceptions.InvalidTargetException;
 import exceptions.MovementException;
 import exceptions.NoAvailableResourcesException;
 import exceptions.NotEnoughActionsException;
-import model.collectibles.Collectible;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
@@ -167,21 +166,15 @@ public class Hero extends Character { // Should be abstract after testing
 			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
 			Game.map[newposX][newposY] = new CharacterCell(null);
 		}
-		// if new Cell is collectible ( Vaccine or Supply)
+		// if new Cell is collectible
 		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
-			// if the Collectible is Vaccine
-			if ((Collectible) Game.map[newposX][newposY] instanceof Vaccine) {
-				((Collectible) Game.map[newposX][newposY]).pickUp(this);
-				Game.map[newposX][newposY] = new CharacterCell(null);
-			}
-			// if the Collectible is Supply
-			if ((Collectible) Game.map[newposX][newposY] instanceof Supply) {
-				((Collectible) Game.map[newposX][newposY]).pickUp(this);
-				Game.map[newposX][newposY] = new CharacterCell(null);
-			}
+			((CollectibleCell) Game.map[newposX][newposY]).getCollectible().pickUp(this);
+			Game.map[newposX][newposY] = new CharacterCell(null);
+
 		}
-		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
 		((CharacterCell) Game.map[currposX][currposY]).setCharacter(null);
+		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
+		this.setLocation(new Point(newposX, newposY));
 		this.setAdjCellsVisiblity(true);
 		actionsAvailable--;
 	}
