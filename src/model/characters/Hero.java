@@ -135,6 +135,19 @@ public class Hero extends Character { // Should be abstract after testing
 		int currposY = currpos.y;
 		int newposX = currposX;
 		int newposY = currposY;
+
+		if (currposX == 14 && d == Direction.DOWN) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
+		if (currposX == 0 && d == Direction.UP) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
+		if (currposY == 14 && d == Direction.LEFT) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
+		if (currposY == 0 && d == Direction.RIGHT) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
 		switch (d) {
 		case UP:
 			newposX = currposX + 1;
@@ -149,13 +162,15 @@ public class Hero extends Character { // Should be abstract after testing
 			newposY = currposY + 1;
 			break;
 		}
-		if (Game.map[newposX][newposY] == null) {
-			Game.map[newposX][newposY] = new CharacterCell(null);
-		}
 		// if the cell is out-of grid
 		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
 			throw new MovementException("You Can Not Move Out Of The Grid");
 		}
+
+		if (Game.map[newposX][newposY] == null) {
+			Game.map[newposX][newposY] = new CharacterCell(null);
+		}
+
 		// if the Cell is occupied
 		if ((Game.map[newposX][newposY] instanceof CharacterCell)
 				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
