@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import exceptions.InvalidTargetException;
-import exceptions.NotEnoughActionsException;
 import model.characters.Character;
 import model.characters.Hero;
 import model.characters.HeroType;
@@ -32,9 +30,9 @@ public class Game {
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
 	public static void main(String[] args) throws IOException {
-		loadHeroes("Heros.csv");
-		startGame(availableHeroes.get(0));
-		System.out.println(AllVaccinesCollected());
+		// loadHeroes("Heros.csv");
+		// startGame(availableHeroes.get(0));
+		// System.out.println(AllVaccinesCollected());
 
 		/*
 		 * Test 1 Character z = ((CharacterCell)map[6][2]).getCharacter(); Character h =
@@ -55,7 +53,23 @@ public class Game {
 
 	}
 
-	public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
+	public static int zombieCount() {
+		int c = 0;
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map.length; j++) {
+				if (map[i][j] instanceof CharacterCell) {
+					if (((CharacterCell) map[i][j]).getCharacter() instanceof Zombie) {
+						c++;
+					}
+				}
+			}
+		}
+		return c;
+	}
+
+	public static void endTurn() {
+		System.out.println("ZomieList= " + zombies);
+		System.out.println("HeroList= " + heroes + "\n");
 		setAllCellsVisibility(false);
 		for (Hero h : heroes) {
 			h.resetVariables();
@@ -79,10 +93,13 @@ public class Game {
 			}
 			z.setTarget(null);
 		}
-		// TODO spawinZombie should be in the Zombie class
+
+//		// TODO spawinZombie should be in the Zombie class
 		freeCellsLocations.addAll(deadCharactersLocations);
 		deadCharactersLocations.clear();
-		Character.spawnZombie();
+
+		if (zombieCount() < 10)
+			Character.spawnZombie();
 	}
 
 	public static void setAllCellsVisibility(boolean isVisible) {
@@ -103,8 +120,19 @@ public class Game {
 		firstHero.addToControlable(new Point(0, 0));
 	}
 
+	public static void updateFreeCellsLocations() {
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				boolean cond1 = !(map[i][j] instanceof CharacterCell);
+				boolean cond2 = map[i][j] instanceof CharacterCell
+						&& ((CharacterCell) map[i][j]).getCharacter() != null;
+				if (cond1 || cond2)
+					freeCellsLocations.remove(new Point(i, j));
+			}
+		}
+	}
+
 	public static void clearingGameLists() {
-		availableHeroes.clear();
 		heroes.clear();
 //		zombies.clear();
 		freeCellsLocations.clear();

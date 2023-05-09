@@ -9,7 +9,7 @@ import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
 import model.world.CharacterCell;
 
-public class Character { // Abstract class Again After testing
+public abstract class Character { // Abstract class Again After testing
 	private String name; // Read Only
 	private Point location;
 	private int maxHp, currentHp, attackDmg; // maxHp & attackDmg are READ only
@@ -17,19 +17,19 @@ public class Character { // Abstract class Again After testing
 	private Character target;
 
 	public static void main(String[] args) {
-		Hero h = new Hero("h", 100, 10, 2);
-		Hero h2 = new Hero("h", 100, 10, 2);
-		Zombie z = new Zombie();
-		z.setLocation(new Point(2, 2));
-		h.setLocation(new Point(2, 1));
-		h2.setLocation(new Point(1, 2));
-		try {
-			z.attack();
-			System.out.println(h.getCurrentHp());
-			System.out.println(h2.getCurrentHp());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+//		Hero h = new Hero("h", 100, 10, 2);
+//		Hero h2 = new Hero("h", 100, 10, 2);
+//		Zombie z = new Zombie();
+//		z.setLocation(new Point(2, 2));
+//		h.setLocation(new Point(2, 1));
+//		h2.setLocation(new Point(1, 2));
+//		try {
+//			z.attack();
+//			System.out.println(h.getCurrentHp());
+//			System.out.println(h2.getCurrentHp());
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
 	}
 
 	public Character(String name, int maxHp, int attackDmg) {
@@ -68,12 +68,12 @@ public class Character { // Abstract class Again After testing
 	public void onCharacterDeath() {
 		if (this.getCurrentHp() <= 0) {
 			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
-			// Game.freeCellsLocations.add(this.getLocation());
 			removeCharacter(this, Game.heroes, Game.zombies);
 		}
 	}
 
 	public static void spawnZombie() {
+		Game.updateFreeCellsLocations();
 		Point freeLocation = Game.getAFreeCellLocation();
 		if (freeLocation != null) {
 			Zombie spawnedZombie = new Zombie();
@@ -89,7 +89,7 @@ public class Character { // Abstract class Again After testing
 			((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
-			((Zombie) character).removeFromGame();
+			Game.zombies.remove(character);
 			Game.deadCharactersLocations.add(this.getLocation());
 			spawnZombie();
 		}
@@ -133,7 +133,7 @@ public class Character { // Abstract class Again After testing
 
 	@Override
 	public String toString() {
-		return "Character [name=" + name + "]";
+		return "Character [name=" + name + " location= " + location + "]";
 	}
 
 	public Point getLocation() {

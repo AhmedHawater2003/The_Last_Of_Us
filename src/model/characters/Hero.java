@@ -14,7 +14,7 @@ import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.TrapCell;
 
-public class Hero extends Character { // Should be abstract after testing
+public abstract class Hero extends Character { // Should be abstract after testing
 	private int actionsAvailable;
 	private int maxActions; // Read Only
 	private boolean specialAction;

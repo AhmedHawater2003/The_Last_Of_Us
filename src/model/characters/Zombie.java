@@ -18,8 +18,11 @@ public class Zombie extends Character {
 
 	public void attack() throws InvalidTargetException, NotEnoughActionsException {
 		setZombieTarget();
-		if (this.getTarget() == null)
+//		System.out.println("My Traget is " + this.getTarget());
+		if (this.getTarget() == null) {
+//			System.out.println("Null have been found");
 			return;
+		}
 		super.attack();
 	}
 
@@ -30,14 +33,15 @@ public class Zombie extends Character {
 			if (atPoint instanceof CharacterCell) {
 				if (((CharacterCell) atPoint).getCharacter() instanceof Hero) {
 					this.setTarget(((CharacterCell) atPoint).getCharacter());
-					return;
+//					System.out.println("ZombieTargetHaveBeenSetten");
+					break;
 				}
 			}
 		}
 	}
 
 	public void removeFromGame() {
-		Game.zombies.remove(this);
+
 	}
 
 }

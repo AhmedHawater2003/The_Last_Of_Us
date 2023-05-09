@@ -1845,8 +1845,6 @@ public class M2PublicTests {
 
 			if (!z.equals((Zombie) character2)) {
 				Point locationZ = z.getLocation();
-				if (!(Game.map[locationZ.x][locationZ.y] instanceof CharacterCell))
-					System.out.println("testZombieAttackDirections : " + locationZ.x + "  " + locationZ.y);
 				((CharacterCell) Game.map[locationZ.x][locationZ.y]).setCharacter(null);
 				iterator.remove();
 			}
@@ -1873,20 +1871,22 @@ public class M2PublicTests {
 				}
 			}
 		}
-
+		System.out.println("------------------------------------------------------------------------");
+		System.out.println("InitialHeroList= " + heroList);
 //		System.out.println("Number of heroes before ending the turn 8 time = " + heroList.size());
-
 		for (int i = 0; i < 8; i++) {
 
 			try {
 				Method endTurn = gameClass.getMethod("endTurn");
 				endTurn.invoke(gameClass);
+				System.out.println(heroList);
 			} catch (Exception e) {
 				System.out.println(e);
 				fail(e.getCause().getClass() + " occuered while trying to end turn, check the Zombies attack!");
 
 			}
 		}
+		System.out.println("------------------------------------------------------------------------");
 
 //		System.out.println("Number of heroes after ending the turn 8 time = " + heroList.size());
 
@@ -2250,8 +2250,14 @@ public class M2PublicTests {
 		attackMethod.invoke(character1);
 
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
-
+		System.out.println(
+				"############################################ testZomibeDeath ##############################################################");
+		System.out.println("isDead - checking the map - : " + isDead);
+		System.out.println("What actually inside the cell : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
 		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
+		System.out.println("isDead - checking the list - : " + isDead);
+		System.out.println(
+				"###########################################################################################################################");
 		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
 				true);
 	}
@@ -5790,6 +5796,12 @@ public class M2PublicTests {
 		fd = Class.forName(gamePath).getDeclaredField("zombies");
 		fd.setAccessible(true);
 		zombies = (ArrayList<Object>) fd.get(null);
+		System.out.println(
+				"****************************************************************testEndTurnAddZombies 2********************************************************************");
+		System.out.println("zombie list size= " + zombies.size());
+		System.out.println("count zomibes= " + countZombies);
+		System.out.println(
+				"************************************************************************************************************************************************************");
 		assertTrue(
 				"The game should add one new zombie to the arraylist of zombies at the end of each turn as long as the game only contains up 10 zombies",
 				zombies.size() > 1);

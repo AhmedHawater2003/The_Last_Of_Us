@@ -21,7 +21,7 @@ public class Vaccine implements Collectible {
 		h.getVaccineInventory().remove(this);
 		Hero newHero = Game.getAnAvailaveHero();
 		Zombie curedZombie = (Zombie) h.getTarget();
-		curedZombie.removeFromGame();
+		Game.zombies.remove(curedZombie);
 		newHero.addToControlable(curedZombie.getLocation());
 
 	}
