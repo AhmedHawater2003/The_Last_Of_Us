@@ -62,7 +62,16 @@ public class Game {
 			h.generateAdjLocations();
 			h.setAdjCellsVisiblity(true);
 		}
-		for (Zombie z : zombies) {
+
+		// ! Because the zombie might be killed and removed
+		// ! from the list while traversing the list, which might
+		// ! lead to an error
+
+		ArrayList<Zombie> tempList = new ArrayList<Zombie>();
+		for (Zombie z : zombies)
+			tempList.add(z);
+
+		for (Zombie z : tempList) {
 			try {
 				z.attack();
 			} catch (Exception e) { // Tests want to catch errors here
