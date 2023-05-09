@@ -2245,15 +2245,18 @@ public class M2PublicTests {
 		} catch (Exception e) {
 			fail(e.getCause().getClass() + " occurred while trying to get Map variable from the Game Class");
 		}
+		System.out.println(
+				"############################################ testZomibeDeath ##############################################################");
+
+		System.out.println("What is inside the cell before attack : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
 
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
-		System.out.println(
-				"############################################ testZomibeDeath ##############################################################");
+
 		System.out.println("isDead - checking the map - : " + isDead);
-		System.out.println("What actually inside the cell : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
+		System.out.println("What is inside the cell after attack : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
 		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
 		System.out.println("isDead - checking the list - : " + isDead);
 		System.out.println(
@@ -5643,6 +5646,12 @@ public class M2PublicTests {
 		fd.setAccessible(true);
 		fd.set(h1, new Point(5, 4));
 
+		Method m2 = Class.forName(charCell).getMethod("getCharacter");
+
+		System.out.println(
+				"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++End Turn Knock Hero 1 +++++++++++++++++++++++++++++++++++++");
+		System.out.println("What is inside the cell before end turn : " + m2.invoke(map[5][4]));
+
 		Method m = Class.forName(gamePath).getMethod("endTurn");
 
 		try {
@@ -5653,13 +5662,14 @@ public class M2PublicTests {
 			e.printStackTrace();
 			fail(e.getCause() + " occured but shouldnt check the console for the error trace");
 		}
+		System.out.println("What is inside the cell after end turn : " + m2.invoke(map[5][4]));
+		System.out.println(
+				"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 		fd = Class.forName(characterPath).getDeclaredField("currentHp");
 		fd.setAccessible(true);
 		assertEquals("Zombies should attack any valid target to their left during ending the turn", 0,
 				(int) fd.get(h1));
-
-		Method m2 = Class.forName(charCell).getMethod("getCharacter");
 
 		assertTrue("Dead heros should be removed from the map", m2.invoke(map[5][4]) == null);
 	}
@@ -5774,6 +5784,9 @@ public class M2PublicTests {
 		Constructor<?> charCellConst = Class.forName(charCell).getConstructor(Class.forName(characterPath));
 		placeRandomObjectOnMap(charCellConst, z);
 
+		System.out.println(
+				"****************************************************************testEndTurnAddZombies 2********************************************************************");
+
 		Method m = Class.forName(gamePath).getMethod("endTurn");
 
 		m.invoke(null);
@@ -5796,9 +5809,11 @@ public class M2PublicTests {
 		fd = Class.forName(gamePath).getDeclaredField("zombies");
 		fd.setAccessible(true);
 		zombies = (ArrayList<Object>) fd.get(null);
-		System.out.println(
-				"****************************************************************testEndTurnAddZombies 2********************************************************************");
+
 		System.out.println("zombie list size= " + zombies.size());
+		for (Object o : zombies) {
+			System.out.println(((Zombie) o).getLocation());
+		}
 		System.out.println("count zomibes= " + countZombies);
 		System.out.println(
 				"************************************************************************************************************************************************************");
