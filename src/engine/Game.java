@@ -27,7 +27,7 @@ public class Game {
 	public static Cell[][] map = new Cell[15][15];
 	public static ArrayList<Hero> availableHeroes = new ArrayList<Hero>();
 	public static ArrayList<Point> freeCellsLocations = new ArrayList<Point>();
-	public static ArrayList<Point> deadZombieLocations = new ArrayList<Point>();
+	public static ArrayList<Point> deadCharactersLocations = new ArrayList<Point>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
@@ -80,8 +80,8 @@ public class Game {
 			z.setTarget(null);
 		}
 		// TODO spawinZombie should be in the Zombie class
-		freeCellsLocations.addAll(deadZombieLocations);
-		deadZombieLocations.clear();
+		freeCellsLocations.addAll(deadCharactersLocations);
+		deadCharactersLocations.clear();
 		Character.spawnZombie();
 	}
 
@@ -106,9 +106,9 @@ public class Game {
 	public static void clearingGameLists() {
 		availableHeroes.clear();
 		heroes.clear();
-		zombies.clear();
+//		zombies.clear();
 		freeCellsLocations.clear();
-		deadZombieLocations.clear();
+		deadCharactersLocations.clear();
 	}
 
 	public static void randomSpawning() {
