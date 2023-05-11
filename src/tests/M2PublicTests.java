@@ -1871,24 +1871,17 @@ public class M2PublicTests {
 				}
 			}
 		}
-		System.out.println("------------------------------------------------------------------------");
-		System.out.println("InitialHeroList= " + heroList);
-//		System.out.println("Number of heroes before ending the turn 8 time = " + heroList.size());
+
 		for (int i = 0; i < 8; i++) {
 
 			try {
 				Method endTurn = gameClass.getMethod("endTurn");
 				endTurn.invoke(gameClass);
-				System.out.println(heroList);
 			} catch (Exception e) {
-				System.out.println(e);
 				fail(e.getCause().getClass() + " occuered while trying to end turn, check the Zombies attack!");
 
 			}
 		}
-		System.out.println("------------------------------------------------------------------------");
-
-//		System.out.println("Number of heroes after ending the turn 8 time = " + heroList.size());
 
 		boolean isAllDead = heroList.size() <= 1;
 
@@ -2248,23 +2241,14 @@ public class M2PublicTests {
 		} catch (Exception e) {
 			fail(e.getCause().getClass() + " occurred while trying to get Map variable from the Game Class");
 		}
-		System.out.println(
-				"############################################ testZomibeDeath ##############################################################");
 
-		System.out.println("What is inside the cell before attack : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
-
-		System.out.println("free cells contains 1 1 " + free.contains(new Point(1, 1)));
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
 		boolean isDead = ((CharacterCell) tmpMap[1][1]).getCharacter() == null;
 
-		System.out.println("isDead - checking the map - : " + isDead);
-		System.out.println("What is inside the cell after attack : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
 		isDead = isDead && !((ArrayList<Zombie>) zombieField.get(gameClass)).contains(character2);
-		System.out.println("isDead - checking the list - : " + isDead);
-		System.out.println(
-				"###########################################################################################################################");
+
 		assertEquals("The Zombie is considered dead if it nolonger exists on the map and in the Zombies array ", isDead,
 				true);
 	}
@@ -3802,6 +3786,7 @@ public class M2PublicTests {
 
 	@Test(timeout = 10000)
 	public void testStartGame10Zombies2() throws Exception {
+
 		resetGameStatics();
 		Method m = Class.forName(gamePath).getMethod("startGame", Class.forName(heroPath));
 
@@ -5605,8 +5590,9 @@ public class M2PublicTests {
 				fd.get(zombiesInRange.get(2)));
 	}
 
-	@Test(timeout = 10000)
+	@Test(timeout = 1000)
 	public void testEndTurnZombieKnockHeroDead1() throws Exception {
+
 		resetGameStatics();
 		Field fd = Class.forName(gamePath).getDeclaredField("zombies");
 		fd.setAccessible(true);
@@ -5779,15 +5765,6 @@ public class M2PublicTests {
 	@Test(timeout = 1000)
 	public void testEndTurnAddZombies2() throws Exception {
 		resetGameStatics();
-		Field freecellsF = null;
-		ArrayList<Point> free = null;
-
-		try {
-			freecellsF = Game.class.getDeclaredField("freeCellsLocations");
-			free = (ArrayList<Point>) freecellsF.get(null);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
 		Field fd = Class.forName(gamePath).getDeclaredField("zombies");
 		fd.setAccessible(true);
 		ArrayList<Object> zombies = (ArrayList<Object>) fd.get(null);
@@ -5796,13 +5773,9 @@ public class M2PublicTests {
 		Constructor<?> charCellConst = Class.forName(charCell).getConstructor(Class.forName(characterPath));
 		placeRandomObjectOnMap(charCellConst, z);
 
-		System.out.println(
-				"****************************************************************testEndTurnAddZombies 2********************************************************************");
 		Method m = Class.forName(gamePath).getMethod("endTurn");
 
 		m.invoke(null);
-
-		System.out.println("test 1 " + free);
 
 		fd = Class.forName(gamePath).getDeclaredField("map");
 		fd.setAccessible(true);
@@ -5823,13 +5796,6 @@ public class M2PublicTests {
 		fd.setAccessible(true);
 		zombies = (ArrayList<Object>) fd.get(null);
 
-		System.out.println("zombie list size= " + zombies.size());
-		for (Object o : zombies) {
-			System.out.println(((Zombie) o).getLocation());
-		}
-		System.out.println("count zomibes= " + countZombies);
-		System.out.println(
-				"************************************************************************************************************************************************************");
 		assertTrue(
 				"The game should add one new zombie to the arraylist of zombies at the end of each turn as long as the game only contains up 10 zombies",
 				zombies.size() > 1);

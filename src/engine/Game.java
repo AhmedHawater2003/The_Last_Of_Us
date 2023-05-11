@@ -34,7 +34,6 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		// loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
-		// System.out.println(AllVaccinesCollected());
 
 		/*
 		 * Test 1 Character z = ((CharacterCell)map[6][2]).getCharacter(); Character h =
@@ -88,17 +87,18 @@ public class Game {
 			tempList.add(z);
 
 		for (Zombie z : tempList) {
-			System.out.println(z);
 			z.attack();
 			z.setTarget(null);
 		}
 
 //		// TODO spawinZombie should be in the Zombie class
-		freeCellsLocations.addAll(deadCharactersLocations);
-		deadCharactersLocations.clear();
 
 		if (zombieCount() < 10)
 			Character.spawnZombie();
+
+		freeCellsLocations.addAll(deadCharactersLocations);
+		deadCharactersLocations.clear();
+
 	}
 
 	public static void setAllCellsVisibility(boolean isVisible) {
@@ -132,7 +132,7 @@ public class Game {
 						&& ((CharacterCell) map[i][j]).getCharacter() != null;
 				if (checkCollectible || checkTrap || checkCharacter)
 					freeCellsLocations.remove(new Point(i, j));
-				else {
+				else if (!deadCharactersLocations.contains(new Point(i, j))) {
 					freeCellsLocations.add(new Point(i, j));
 				}
 			}

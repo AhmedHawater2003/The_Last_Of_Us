@@ -85,6 +85,7 @@ public abstract class Character { // Abstract class Again After testing
 
 	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
 		if (character instanceof Hero) {
+			System.out.println("test " + Game.freeCellsLocations.contains(character.getLocation()));
 			Game.deadCharactersLocations.add(this.getLocation());
 			((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
