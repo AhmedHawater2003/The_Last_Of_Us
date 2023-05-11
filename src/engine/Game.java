@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 import model.characters.Character;
 import model.characters.Hero;
 import model.characters.HeroType;
@@ -31,7 +33,7 @@ public class Game {
 
 	public static void main(String[] args) throws IOException {
 		// loadHeroes("Heros.csv");
-		// startGame(availableHeroes.get(0));
+		startGame(availableHeroes.get(0));
 		// System.out.println(AllVaccinesCollected());
 
 		/*
@@ -67,7 +69,7 @@ public class Game {
 		return c;
 	}
 
-	public static void endTurn() {
+	public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
 		System.out.println("ZomieList= " + zombies);
 		System.out.println("HeroList= " + heroes + "\n");
 		setAllCellsVisibility(false);
@@ -86,11 +88,8 @@ public class Game {
 			tempList.add(z);
 
 		for (Zombie z : tempList) {
-			try {
-				z.attack();
-			} catch (Exception e) { // Tests want to catch errors here
-				System.out.println("An Exceptions was thrown when a zombie tried to attack : " + e.getMessage());
-			}
+			System.out.println(z);
+			z.attack();
 			z.setTarget(null);
 		}
 
@@ -121,13 +120,21 @@ public class Game {
 	}
 
 	public static void updateFreeCellsLocations() {
+		freeCellsLocations.clear();
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				boolean cond1 = !(map[i][j] instanceof CharacterCell);
-				boolean cond2 = map[i][j] instanceof CharacterCell
+				if (map[i][j] == null) {
+					map[i][j] = new CharacterCell(null);
+				}
+				boolean checkCollectible = map[i][j] instanceof CollectibleCell;
+				boolean checkTrap = map[i][j] instanceof TrapCell;
+				boolean checkCharacter = map[i][j] instanceof CharacterCell
 						&& ((CharacterCell) map[i][j]).getCharacter() != null;
-				if (cond1 || cond2)
+				if (checkCollectible || checkTrap || checkCharacter)
 					freeCellsLocations.remove(new Point(i, j));
+				else {
+					freeCellsLocations.add(new Point(i, j));
+				}
 			}
 		}
 	}

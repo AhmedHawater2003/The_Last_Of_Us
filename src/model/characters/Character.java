@@ -67,8 +67,8 @@ public abstract class Character { // Abstract class Again After testing
 
 	public void onCharacterDeath() {
 		if (this.getCurrentHp() <= 0) {
-			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
 			removeCharacter(this, Game.heroes, Game.zombies);
+			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
 		}
 	}
 
@@ -89,6 +89,9 @@ public abstract class Character { // Abstract class Again After testing
 			((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
+			System.out.println("test bla bvla " + ((CharacterCell) Game.map[1][1]).getCharacter());
+			System.out.println("test 1 " + character.getLocation());
+			System.out.println("test 2 " + Game.freeCellsLocations.contains(new Point(1, 1)));
 			Game.zombies.remove(character);
 			Game.deadCharactersLocations.add(this.getLocation());
 			spawnZombie();

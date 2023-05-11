@@ -16,11 +16,11 @@ public class Zombie extends Character {
 		ZOMBIES_COUNT++;
 	}
 
+	// ! Zombie attack should not through errors, it should
+	// ! just do nothing if the target is invalid
 	public void attack() throws InvalidTargetException, NotEnoughActionsException {
 		setZombieTarget();
-//		System.out.println("My Traget is " + this.getTarget());
 		if (this.getTarget() == null) {
-//			System.out.println("Null have been found");
 			return;
 		}
 		super.attack();
@@ -33,11 +33,11 @@ public class Zombie extends Character {
 			if (atPoint instanceof CharacterCell) {
 				if (((CharacterCell) atPoint).getCharacter() instanceof Hero) {
 					this.setTarget(((CharacterCell) atPoint).getCharacter());
-//					System.out.println("ZombieTargetHaveBeenSetten");
-					break;
+					return;
 				}
 			}
 		}
+		this.setTarget(null);
 	}
 
 	public void removeFromGame() {

@@ -2195,7 +2195,6 @@ public class M2PublicTests {
 	@Test(timeout = 1000)
 	public void testZombieDeath() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
 			InstantiationException, InvocationTargetException {
-
 		int maxHp = (int) (Math.random() * 100) + 10;
 		int attackDamage = 40;
 		int maxActions = 1;
@@ -2218,8 +2217,12 @@ public class M2PublicTests {
 
 		Cell[][] tmpMap = null;
 		Field zombieField = null;
+		Field freecellsF = null;
+		ArrayList<Point> free = null;
 
 		try {
+			freecellsF = Game.class.getDeclaredField("freeCellsLocations");
+			free = (ArrayList<Point>) freecellsF.get(gameClass);
 
 			Field mapField = Game.class.getDeclaredField("map");
 			tmpMap = (Cell[][]) mapField.get(gameClass);
@@ -2250,6 +2253,7 @@ public class M2PublicTests {
 
 		System.out.println("What is inside the cell before attack : " + ((CharacterCell) tmpMap[1][1]).getCharacter());
 
+		System.out.println("free cells contains 1 1 " + free.contains(new Point(1, 1)));
 		Method attackMethod = characterClass.getMethod("attack");
 		attackMethod.invoke(character1);
 
@@ -5772,10 +5776,18 @@ public class M2PublicTests {
 
 	}
 
-	@Test(timeout = 10000)
+	@Test(timeout = 1000)
 	public void testEndTurnAddZombies2() throws Exception {
 		resetGameStatics();
+		Field freecellsF = null;
+		ArrayList<Point> free = null;
 
+		try {
+			freecellsF = Game.class.getDeclaredField("freeCellsLocations");
+			free = (ArrayList<Point>) freecellsF.get(null);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		Field fd = Class.forName(gamePath).getDeclaredField("zombies");
 		fd.setAccessible(true);
 		ArrayList<Object> zombies = (ArrayList<Object>) fd.get(null);
@@ -5786,10 +5798,11 @@ public class M2PublicTests {
 
 		System.out.println(
 				"****************************************************************testEndTurnAddZombies 2********************************************************************");
-
 		Method m = Class.forName(gamePath).getMethod("endTurn");
 
 		m.invoke(null);
+
+		System.out.println("test 1 " + free);
 
 		fd = Class.forName(gamePath).getDeclaredField("map");
 		fd.setAccessible(true);
