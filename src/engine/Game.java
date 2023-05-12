@@ -32,7 +32,7 @@ public class Game {
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 
 	public static void main(String[] args) throws IOException {
-		// loadHeroes("Heros.csv");
+		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
 
 		/*
@@ -69,8 +69,7 @@ public class Game {
 	}
 
 	public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
-		System.out.println("ZomieList= " + zombies);
-		System.out.println("HeroList= " + heroes + "\n");
+
 		setAllCellsVisibility(false);
 		for (Hero h : heroes) {
 			h.resetVariables();

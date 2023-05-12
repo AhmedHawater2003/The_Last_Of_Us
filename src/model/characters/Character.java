@@ -9,28 +9,12 @@ import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
 import model.world.CharacterCell;
 
-public abstract class Character { // Abstract class Again After testing
+public abstract class Character {
 	private String name; // Read Only
 	private Point location;
 	private int maxHp, currentHp, attackDmg; // maxHp & attackDmg are READ only
 	private HashSet<Point> adjLocations = new HashSet<Point>();
 	private Character target;
-
-	public static void main(String[] args) {
-//		Hero h = new Hero("h", 100, 10, 2);
-//		Hero h2 = new Hero("h", 100, 10, 2);
-//		Zombie z = new Zombie();
-//		z.setLocation(new Point(2, 2));
-//		h.setLocation(new Point(2, 1));
-//		h2.setLocation(new Point(1, 2));
-//		try {
-//			z.attack();
-//			System.out.println(h.getCurrentHp());
-//			System.out.println(h2.getCurrentHp());
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-	}
 
 	public Character(String name, int maxHp, int attackDmg) {
 		this.name = name;
@@ -85,14 +69,10 @@ public abstract class Character { // Abstract class Again After testing
 
 	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
 		if (character instanceof Hero) {
-			System.out.println("test " + Game.freeCellsLocations.contains(character.getLocation()));
 			Game.deadCharactersLocations.add(this.getLocation());
 			((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
-			System.out.println("test bla bvla " + ((CharacterCell) Game.map[1][1]).getCharacter());
-			System.out.println("test 1 " + character.getLocation());
-			System.out.println("test 2 " + Game.freeCellsLocations.contains(new Point(1, 1)));
 			Game.zombies.remove(character);
 			Game.deadCharactersLocations.add(this.getLocation());
 			spawnZombie();
@@ -127,17 +107,21 @@ public abstract class Character { // Abstract class Again After testing
 		}
 	}
 
+	public boolean targetIsAdj() {
+		return this.getAdjLocations().contains(this.target.getLocation());
+	}
+
+	@Override
+	public String toString() {
+		return "Character [name=" + name + " location= " + location + "]";
+	}
+
 	public HashSet<Point> getAdjLocations() {
 		return adjLocations;
 	}
 
 	public void setAdjLocations(HashSet<Point> adjLocations) {
 		this.adjLocations = adjLocations;
-	}
-
-	@Override
-	public String toString() {
-		return "Character [name=" + name + " location= " + location + "]";
 	}
 
 	public Point getLocation() {

@@ -5638,10 +5638,6 @@ public class M2PublicTests {
 
 		Method m2 = Class.forName(charCell).getMethod("getCharacter");
 
-		System.out.println(
-				"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++End Turn Knock Hero 1 +++++++++++++++++++++++++++++++++++++");
-		System.out.println("What is inside the cell before end turn : " + m2.invoke(map[5][4]));
-
 		Method m = Class.forName(gamePath).getMethod("endTurn");
 
 		try {
@@ -5652,9 +5648,6 @@ public class M2PublicTests {
 			e.printStackTrace();
 			fail(e.getCause() + " occured but shouldnt check the console for the error trace");
 		}
-		System.out.println("What is inside the cell after end turn : " + m2.invoke(map[5][4]));
-		System.out.println(
-				"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 		fd = Class.forName(characterPath).getDeclaredField("currentHp");
 		fd.setAccessible(true);

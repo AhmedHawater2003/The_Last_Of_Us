@@ -14,7 +14,7 @@ import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.TrapCell;
 
-public abstract class Hero extends Character { // Should be abstract after testing
+public abstract class Hero extends Character {
 	private int actionsAvailable;
 	private int maxActions; // Read Only
 	private boolean specialAction;
@@ -78,7 +78,6 @@ public abstract class Hero extends Character { // Should be abstract after testi
 	public void setAdjCellsVisiblity(boolean visible) {
 		for (Point p : this.getAdjLocations()) {
 
-			// ? Done to overcome testValidCureUpdate .. Is this Ok or I am missing up
 			if (Game.map[p.x][p.y] == null) {
 				Game.map[p.x][p.y] = new CharacterCell(null);
 			}
