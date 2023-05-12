@@ -29,7 +29,6 @@ public class TrapCell extends Cell {
 
 	public void applyDamage(Hero h) {
 		h.setCurrentHp(h.getCurrentHp() - this.getTrapDamage());
-		// ((CharacterCell) TrapCell).setCharacter(h);
 		if (h.getCurrentHp() <= 0) {
 			h.onCharacterDeath();
 		}

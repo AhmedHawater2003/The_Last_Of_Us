@@ -93,6 +93,75 @@ public abstract class Hero extends Character {
 		this.setAdjCellsVisiblity(true);
 	}
 
+	public void move(Direction d) throws MovementException, NotEnoughActionsException {
+		if (this.actionsAvailable <= 0) {
+			throw new NotEnoughActionsException();
+		}
+		if (this.getCurrentHp() <= 0) {
+			this.onCharacterDeath();
+			return;
+		}
+		Point currpos = this.getLocation();
+		int newposX = currpos.x;
+		int newposY = currpos.y;
+
+		switch (d) {
+		case UP:
+			newposX = currpos.x + 1;
+			break;
+		case DOWN:
+			newposX = currpos.x - 1;
+			break;
+		case LEFT:
+			newposY = currpos.y - 1;
+			break;
+		case RIGHT:
+			newposY = currpos.y + 1;
+			break;
+		}
+		
+		// if the cell is out-of grid
+		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
+			throw new MovementException("You Can Not Move Out Of The Grid");
+		}
+
+		if (Game.map[newposX][newposY] == null) {
+			Game.map[newposX][newposY] = new CharacterCell(null);
+		}
+
+		// if the Cell is occupied
+		if ((Game.map[newposX][newposY] instanceof CharacterCell)
+				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
+			throw new MovementException("You Can Not Move into Occupied Cell");
+		}
+		// if new Cell is Trap
+		if (Game.map[newposX][newposY] instanceof TrapCell) {
+			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
+			Game.map[newposX][newposY] = new CharacterCell(null);
+		}
+		// if new Cell is collectible
+		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
+			((CollectibleCell) Game.map[newposX][newposY]).getCollectible().pickUp(this);
+			Game.map[newposX][newposY] = new CharacterCell(null);
+
+		}
+		((CharacterCell) Game.map[currpos.x][currpos.y]).setCharacter(null);
+		actionsAvailable--;
+		
+		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
+		this.setLocation(new Point(newposX, newposY));
+		this.setAdjCellsVisiblity(true);
+		
+	}
+
+	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
+		if (this.supplyInventory.isEmpty()) {
+			throw new NoAvailableResourcesException("NoAvailableResourcesException");
+		}
+		this.supplyInventory.remove(0);
+		this.setSpecialAction(true);
+	}
+
 	public int getActionsAvailable() {
 		return actionsAvailable;
 	}
@@ -119,86 +188,6 @@ public abstract class Hero extends Character {
 
 	public ArrayList<Supply> getSupplyInventory() {
 		return supplyInventory;
-	}
-
-	public void move(Direction d) throws MovementException, NotEnoughActionsException {
-		if (this.actionsAvailable <= 0) {
-			throw new NotEnoughActionsException();
-		}
-		if (this.getCurrentHp() <= 0) {
-			this.onCharacterDeath();
-			return;
-		}
-		Point currpos = this.getLocation();
-		int currposX = currpos.x;
-		int currposY = currpos.y;
-		int newposX = currposX;
-		int newposY = currposY;
-
-		if (currposX == 14 && d == Direction.DOWN) {
-			throw new MovementException("You Can Not Move Out Of The Grid");
-		}
-		if (currposX == 0 && d == Direction.UP) {
-			throw new MovementException("You Can Not Move Out Of The Grid");
-		}
-		if (currposY == 14 && d == Direction.LEFT) {
-			throw new MovementException("You Can Not Move Out Of The Grid");
-		}
-		if (currposY == 0 && d == Direction.RIGHT) {
-			throw new MovementException("You Can Not Move Out Of The Grid");
-		}
-		switch (d) {
-		case UP:
-			newposX = currposX + 1;
-			break;
-		case DOWN:
-			newposX = currposX - 1;
-			break;
-		case LEFT:
-			newposY = currposY - 1;
-			break;
-		case RIGHT:
-			newposY = currposY + 1;
-			break;
-		}
-		// if the cell is out-of grid
-		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
-			throw new MovementException("You Can Not Move Out Of The Grid");
-		}
-
-		if (Game.map[newposX][newposY] == null) {
-			Game.map[newposX][newposY] = new CharacterCell(null);
-		}
-
-		// if the Cell is occupied
-		if ((Game.map[newposX][newposY] instanceof CharacterCell)
-				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
-			throw new MovementException("You Can Not Move into Occupied Cell");
-		}
-		// if new Cell is Trap
-		if (Game.map[newposX][newposY] instanceof TrapCell) {
-			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
-			Game.map[newposX][newposY] = new CharacterCell(null);
-		}
-		// if new Cell is collectible
-		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
-			((CollectibleCell) Game.map[newposX][newposY]).getCollectible().pickUp(this);
-			Game.map[newposX][newposY] = new CharacterCell(null);
-
-		}
-		((CharacterCell) Game.map[currposX][currposY]).setCharacter(null);
-		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
-		this.setLocation(new Point(newposX, newposY));
-		this.setAdjCellsVisiblity(true);
-		actionsAvailable--;
-	}
-
-	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
-		if (this.supplyInventory.isEmpty()) {
-			throw new NoAvailableResourcesException("NoAvailableResourcesException");
-		}
-		this.supplyInventory.remove(0);
-		this.setSpecialAction(true);
 	}
 
 }

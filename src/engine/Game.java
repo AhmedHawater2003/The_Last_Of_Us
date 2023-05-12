@@ -34,24 +34,6 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
-
-		/*
-		 * Test 1 Character z = ((CharacterCell)map[6][2]).getCharacter(); Character h =
-		 * ((CharacterCell)map[1][2]).getCharacter(); Character h2 =
-		 * ((CharacterCell)map[2][1]).getCharacter(); try {
-		 * System.out.println(z.getCurrentHp()); h.setTarget(z); h2.setTarget(z);
-		 * h.attack(); h2.attack(); System.out.println(z.getCurrentHp()); } catch
-		 * (Exception e) { System.out.println(e.getMessage()); }
-		 */
-
-		/*
-		 * Test 2 System.out.println(availableHeroes);
-		 * System.out.println(heroes.get(0).getLocation());
-		 * System.out.println(((CharacterCell) map[0][0]).getCharacter()); for (int i =
-		 * 0; i < map.length; i++) { for (int j = 0; j < map.length; j++) {
-		 * System.out.println("( " + i + ", " + j + " )" + " -> " + map[i][j]); } }
-		 */
-
 	}
 
 	public static int zombieCount() {
