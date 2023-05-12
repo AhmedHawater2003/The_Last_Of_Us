@@ -12,7 +12,7 @@ public class Medic extends Hero {
 		if (this.getTarget().equals(null) || this.getTarget() instanceof Zombie || !this.targetIsAdj())
 			throw new InvalidTargetException("InvalidTargetException");
 		super.useSpecial();
-		this.getTarget().setCurrentHp(getMaxHp());
+		this.getTarget().setCurrentHp(this.getTarget().getMaxHp());
 
 	}
 }

@@ -41,19 +41,14 @@ public abstract class Character {
 	}
 
 	public void defend(Character c) {
-		if (c.currentHp < this.attackDmg / 2) {
-			c.currentHp = 0;
+		c.setCurrentHp(c.getCurrentHp() - this.attackDmg / 2);
+		if (c.getCurrentHp() <= 0)
 			c.onCharacterDeath();
-		} else
-			c.currentHp = c.currentHp - this.attackDmg / 2;
-
 	}
 
 	public void onCharacterDeath() {
-		if (this.getCurrentHp() <= 0) {
-			removeCharacter(this, Game.heroes, Game.zombies);
-			((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
-		}
+		removeCharacter(this, Game.heroes, Game.zombies);
+		((CharacterCell) Game.map[location.x][location.y]).setCharacter(null);
 	}
 
 	public static void spawnZombie() {

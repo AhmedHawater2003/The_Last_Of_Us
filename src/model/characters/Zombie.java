@@ -40,8 +40,4 @@ public class Zombie extends Character {
 		this.setTarget(null);
 	}
 
-	public void removeFromGame() {
-
-	}
-
 }

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import exceptions.InvalidTargetException;
@@ -13,7 +14,6 @@ import model.characters.Character;
 import model.characters.Hero;
 import model.characters.HeroType;
 import model.characters.Zombie;
-import model.collectibles.Collectible;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.Cell;
@@ -34,6 +34,10 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
+		ArrayList<Integer> a = new ArrayList<Integer>(Arrays.asList(new Integer[] { 1, 2, 3 }));
+		for (int x : a) {
+			a.remove(x);
+		}
 	}
 
 	public static int zombieCount() {
@@ -72,8 +76,7 @@ public class Game {
 			z.setTarget(null);
 		}
 
-//		// TODO spawinZombie should be in the Zombie class
-
+		// ! check if this trueeeeeeeee
 		if (zombieCount() < 10)
 			Character.spawnZombie();
 
@@ -121,7 +124,7 @@ public class Game {
 	}
 
 	public static void clearingGameLists() {
-		heroes.clear();
+//		heroes.clear();
 //		zombies.clear();
 		freeCellsLocations.clear();
 		deadCharactersLocations.clear();
@@ -218,7 +221,7 @@ public class Game {
 	public static boolean checkWin() {
 		if (!AllVaccinesCollected())
 			return false;
-		if (heroes.size() >= 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes)) {
+		if (CountControllableHeroes() >= 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes)) {
 			return true;
 		}
 		return false;
@@ -247,21 +250,22 @@ public class Game {
 		return true;
 	}
 
-	public static boolean checkGameOver() {
+	public static int CountControllableHeroes() {
+		int c = 0;
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				if (map[i][j] instanceof Collectible)
-					if ((Collectible) Game.map[i][j] instanceof Vaccine)
-						return false;
+				if (map[i][j] instanceof CharacterCell && (((CharacterCell) map[i][j]).getCharacter() instanceof Hero))
+					c++;
 			}
 		}
-		if (heroes.isEmpty())
+		return c;
+	}
+
+	public static boolean checkGameOver() {
+		if (CountControllableHeroes() == 0)
 			return true;
-		if (availableHeroes.isEmpty() && AllVaccinesCollected())
+		if (CountControllableHeroes() < 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes))
 			return true;
-		if (heroes.size() < 5)
-			if (AllVaccinesCollected() && HeroUsedAllVaccines(heroes))
-				return true;
 		return false;
 	}
 }

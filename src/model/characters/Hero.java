@@ -53,17 +53,16 @@ public abstract class Hero extends Character {
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException("No actions available");
 		}
-		if (this.vaccineInventory.size() == 0) {
+		if (this.vaccineInventory.isEmpty()) {
 			throw new NoAvailableResourcesException("No vaccines available");
 		}
-		if (!(this.getAdjLocations().contains(this.getTarget().getLocation()))) {
+		if (!this.targetIsAdj()) {
 			throw new InvalidTargetException("Target is not in range");
 		}
 		if (this.getTarget() instanceof Hero) {
 			throw new InvalidTargetException("A hero cannot cure another hero");
 		}
 
-		// ? which vaccine to use?
 		this.vaccineInventory.get(0).use(this);
 		this.actionsAvailable--;
 
@@ -119,7 +118,7 @@ public abstract class Hero extends Character {
 			newposY = currpos.y + 1;
 			break;
 		}
-		
+
 		// if the cell is out-of grid
 		if (newposX < 0 || newposX >= 15 || newposY < 0 || newposY >= 15) {
 			throw new MovementException("You Can Not Move Out Of The Grid");
@@ -137,21 +136,23 @@ public abstract class Hero extends Character {
 		// if new Cell is Trap
 		if (Game.map[newposX][newposY] instanceof TrapCell) {
 			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
-			Game.map[newposX][newposY] = new CharacterCell(null);
 		}
 		// if new Cell is collectible
 		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
 			((CollectibleCell) Game.map[newposX][newposY]).getCollectible().pickUp(this);
-			Game.map[newposX][newposY] = new CharacterCell(null);
-
 		}
-		((CharacterCell) Game.map[currpos.x][currpos.y]).setCharacter(null);
+
 		actionsAvailable--;
-		
-		((CharacterCell) Game.map[newposX][newposY]).setCharacter(this);
+		((CharacterCell) Game.map[currpos.x][currpos.y]).setCharacter(null);
+		Game.map[newposX][newposY] = new CharacterCell(this);
 		this.setLocation(new Point(newposX, newposY));
-		this.setAdjCellsVisiblity(true);
-		
+
+		if (this.getCurrentHp() <= 0) {
+			this.onCharacterDeath();
+		} else {
+			this.setAdjCellsVisiblity(true);
+		}
+
 	}
 
 	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
