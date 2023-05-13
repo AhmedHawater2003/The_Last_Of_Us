@@ -146,11 +146,10 @@ public abstract class Hero extends Character {
 		((CharacterCell) Game.map[currpos.x][currpos.y]).setCharacter(null);
 		Game.map[newposX][newposY] = new CharacterCell(this);
 		this.setLocation(new Point(newposX, newposY));
+		this.setAdjCellsVisiblity(true);
 
 		if (this.getCurrentHp() <= 0) {
 			this.onCharacterDeath();
-		} else {
-			this.setAdjCellsVisiblity(true);
 		}
 
 	}

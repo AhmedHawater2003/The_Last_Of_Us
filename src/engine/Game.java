@@ -76,7 +76,6 @@ public class Game {
 			z.setTarget(null);
 		}
 
-		// ! check if this trueeeeeeeee
 		if (zombieCount() < 10)
 			Character.spawnZombie();
 
