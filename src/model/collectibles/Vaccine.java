@@ -1,8 +1,11 @@
 package model.collectibles;
 
+import java.awt.Point;
+
 import engine.Game;
 import model.characters.Hero;
 import model.characters.Zombie;
+import model.world.CharacterCell;
 
 public class Vaccine implements Collectible {
 
@@ -21,8 +24,13 @@ public class Vaccine implements Collectible {
 		h.getVaccineInventory().remove(this);
 		Hero newHero = Game.getAnAvailaveHero();
 		Zombie curedZombie = (Zombie) h.getTarget();
+		Point p = curedZombie.getLocation();
 		Game.zombies.remove(curedZombie);
-		newHero.addToControlable(curedZombie.getLocation());
+		Game.availableHeroes.remove(newHero);
+		newHero.setLocation(p);
+		((CharacterCell) Game.map[p.x][p.y]).setCharacter(newHero);
+		Game.heroes.add(newHero);
+
 	}
 
 }

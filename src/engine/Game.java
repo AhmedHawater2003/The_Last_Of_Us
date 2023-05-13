@@ -76,8 +76,7 @@ public class Game {
 			z.setTarget(null);
 		}
 
-		if (zombieCount() < 10)
-			Character.spawnZombie();
+		Character.spawnZombie();
 
 		freeCellsLocations.addAll(deadCharactersLocations);
 		deadCharactersLocations.clear();
