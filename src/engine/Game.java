@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import exceptions.InvalidTargetException;
@@ -34,10 +33,6 @@ public class Game {
 	public static void main(String[] args) throws IOException {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
-		ArrayList<Integer> a = new ArrayList<Integer>(Arrays.asList(new Integer[] { 1, 2, 3 }));
-		for (int x : a) {
-			a.remove(x);
-		}
 	}
 
 	public static int zombieCount() {
