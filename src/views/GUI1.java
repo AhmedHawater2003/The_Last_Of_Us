@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GUI1 extends Application {
@@ -20,7 +21,12 @@ public class GUI1 extends Application {
 
 		StackPane root = new StackPane();
 		root.getChildren().add(btn);
-		primaryStage.setScene(new Scene(root, 300, 250));
+		Scene scene = new Scene(root, 300, 250);
+
+		// Apply CSS styles
+		scene.setFill(Color.RED);
+
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 }
