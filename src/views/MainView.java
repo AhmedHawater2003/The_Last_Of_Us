@@ -50,7 +50,7 @@ public class MainView extends Application {
         MainScene.getStylesheets().add(
                 getClass().getResource("styles.css").toExternalForm());
 
-        ImageView background = new ImageView(new Image("views\\Five.jpg", 1980,
+        ImageView background = new ImageView(new Image("views\\BG1.jpg", 1980,
                 1080, true, true));
         root.getChildren().add(background);
 
