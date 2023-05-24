@@ -3,8 +3,6 @@ package views;
 import java.io.IOException;
 import java.util.*;
 
-import com.sun.corba.se.impl.orbutil.graph.Node;
-
 import engine.Game;
 import model.characters.*;
 import javafx.application.Application;

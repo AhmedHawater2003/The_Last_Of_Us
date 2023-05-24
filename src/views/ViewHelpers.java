@@ -92,7 +92,7 @@ public class ViewHelpers {
     }
 
     public static Pane availableHeroPane(Hero hero){
-        Node heroImage = borderedImage("views\\assasin.png", HEIGHT/7 );
+        Node heroImage = borderedImage("views\\ellie.png", HEIGHT/7 );
         Node heroInfo = availableHeroInfo(hero);
         Pane pane = heroPane(heroImage, heroInfo);
         pane.getStyleClass().add("available-hero");
@@ -100,7 +100,7 @@ public class ViewHelpers {
     }
 
     public static Pane selectedHeroPane(Hero hero){
-        Node heroImage = borderedImage("views\\assasin.png", HEIGHT/6 );
+        Node heroImage = borderedImage("views\\joel.png", HEIGHT/6 );
         Node heroInfo = selctedHeroInfo(hero);
         Pane pane = heroPane(heroImage, heroInfo);
         pane.getStyleClass().add("selected-hero");

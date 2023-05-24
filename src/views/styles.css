@@ -1,7 +1,7 @@
 .button{
-    -fx-background-color: rgba(255, 250, 250, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
-    -fx-border-color:white; 
-    -fx-border-width: 1px; /* Adjust the border width as desired */
+    -fx-background-color: rgba(255, 255, 255, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
+    -fx-border-color:rgb(10, 28, 1); 
+    -fx-border-width: 2px; /* Adjust the border width as desired */
 }
 
 #blured{
@@ -16,9 +16,9 @@
 }
 
 
-.doctor{
+/* .doctor{
   -fx-background-color: rgba(0, 153, 255, 0.3); 
-}
+} */
 
 .explorer{
   -fx-background-color: rgba(255, 251, 0, 0.3); 

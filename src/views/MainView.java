@@ -2,6 +2,8 @@ package views;
 
 import views.ViewHelpers.*;
 import java.util.*;
+
+import engine.Game;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,6 +29,7 @@ import javafx.stage.Stage;
 import model.characters.Fighter;
 import model.characters.Hero;
 import model.characters.Zombie;
+import model.world.Cell;
 
 public class MainView extends Application {
     public static final double WIDTH = Screen.getPrimary().getBounds()
@@ -37,7 +40,9 @@ public class MainView extends Application {
     public static BorderPane root = new BorderPane();
     public static Scene MainScene = new Scene(root);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Game.loadHeroes("Heros.csv");
+        Game.startGame(new Fighter("Bill", 100, 100, 100));
         launch(args);
     }
 
@@ -97,66 +102,18 @@ public class MainView extends Application {
         tmpVbox.setSpacing(5);
         root.setCenter(tmpVbox);
 
-        double cellWidth = WIDTH - WIDTH / 6, cellHeight = HEIGHT - HEIGHT / 15;
+        
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                myButton cell = new myButton(i, j);
-                cell.setPrefSize(cellWidth / 15, cellHeight / 15);
-                mapGrid.add(cell, i, j);
-                if(!(j == 14 && i == 0)){
-                    cell.setEffect(new GaussianBlur(10.5));
-                    cell.setId("blured");
-                }
-                cell.setOnAction(e -> {
-                    myButton b = (myButton) e.getSource();
-                    System.out.println(b.x + " " + b.y);
-                });
+                Cell c = Game.map[i][j];
+                mapGrid.add(new myButton(c), i,14 -j);
             }
         }
 
         // Showing how the icons look like
-        myButton b = (myButton) mapGrid.getChildren().get(14);
-        ImageView view = new ImageView("icons\\doctor.png");
-        b.getStyleClass().add("doctor");
-        view.setFitHeight(cellHeight / 22);
-        view.setFitWidth(cellWidth / 22);
-        b.setGraphic(view);
+        int row = 3, col = 14;
+        myButton b = (myButton) mapGrid.getChildren().get(col * 15 + row);
 
-        myButton b2 = (myButton) mapGrid.getChildren().get(224 - 1);
-        ImageView view2 = new ImageView("views\\explorer.png");
-
-        b2.getStyleClass().add("explorer");
-        view2.setFitHeight(cellHeight / 22);
-        view2.setFitWidth(cellWidth / 22);
-        b2.setGraphic(view2);
-
-        myButton b3 = (myButton) mapGrid.getChildren().get(224 - 2);
-        ImageView view3 = new ImageView("views\\assasin.png");
-        b3.getStyleClass().add("fighter");
-        view3.setFitHeight(cellHeight / 22);
-        view3.setFitWidth(cellWidth / 22);
-        b3.setGraphic(view3);
-
-        myButton b4 = (myButton) mapGrid.getChildren().get(224 - 3);
-        ImageView view4 = new ImageView("icons\\zombie.png");
-        b4.getStyleClass().add("zombie");
-        view4.setFitHeight(cellHeight / 22);
-        view4.setFitWidth(cellWidth / 22);
-        b4.setGraphic(view4);
-
-        myButton b5 = (myButton) mapGrid.getChildren().get(224 - 4);
-        ImageView view5 = new ImageView("icons\\supply.png");
-        b5.getStyleClass().add("collectible");
-        view5.setFitHeight(cellHeight / 22);
-        view5.setFitWidth(cellWidth / 22);
-        b5.setGraphic(view5);
-
-        myButton b6 = (myButton) mapGrid.getChildren().get(224 - 5);
-        ImageView view6 = new ImageView("icons\\vaccine.png");
-        b6.getStyleClass().add("collectible");
-        view6.setFitHeight(cellHeight / 22);
-        view6.setFitWidth(cellWidth / 22);
-        b6.setGraphic(view6);
 
         primaryStage.show();
 
