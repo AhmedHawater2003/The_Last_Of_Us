@@ -1,5 +1,6 @@
 .button{
-    -fx-background-color: rgba(167, 167, 167, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
+    
+  -fx-background-color: rgba(167, 167, 167, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
     -fx-background-radius: 10px;
 }
 
@@ -147,6 +148,11 @@
   -fx-border-width: 5px;
   -fx-border-radius: 5px;
 }
+
+.damged{
+	-fx-background-color : radial-gradient(center 50% 50%, radius 50%,rgba(255, 0, 0, 1) 0%, transparent 100%);
+}
+
 
 .target{
   -fx-border-color:rgb(148, 1, 1);

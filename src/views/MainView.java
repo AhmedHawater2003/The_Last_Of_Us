@@ -25,10 +25,11 @@ import model.world.Cell;
 import model.world.CharacterCell;
 
 import java.awt.Point;
+import java.io.IOException;
 
 import engine.Game;
 
-public class MainView extends Application {
+public class MainView extends Application{
     public static final double WIDTH = Screen.getPrimary().getBounds()
             .getWidth();
     public static final double HEIGHT = Screen.getPrimary().getBounds()
@@ -40,10 +41,12 @@ public class MainView extends Application {
     public static VBox herosBar;
     public static HBox interactingStatusBar;
     public static VBox controllabeleHeros;
-
+    
+    public MainView(Stage s){
+    	start(s);
+    }
+    
     public static void main(String[] args) throws Exception {
-        Game.loadHeroes("Heros.csv");
-        Game.startGame(new Fighter("Bill", 2, 100, 1000));
         launch(args);
     }
 
@@ -159,8 +162,15 @@ public class MainView extends Application {
         return p.y * 15 + p.x;
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage){
+//    	try {
+//			Game.loadHeroes("Heros.csv");
+//			Game.startGame(new Fighter("Bill", 2, 100, 1000));
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+        
         primaryStage.setTitle("The Last of Us");
         primaryStage.setMaximized(true);
         primaryStage.setScene(MainScene);

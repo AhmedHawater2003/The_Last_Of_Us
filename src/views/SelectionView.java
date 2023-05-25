@@ -28,20 +28,26 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import views.MainView;
 
 
-public class SelectionView extends Application {
+public class SelectionView {
 	 public static final double WIDTH = Screen.getPrimary().getBounds()
 	            .getWidth();
 	    public static final double HEIGHT = Screen.getPrimary().getBounds()
 	            .getHeight();
 	
 	    
-	    public static void main(String[] args) throws Exception{
-	    	Game.loadHeroes("Heros.csv");
-	    	launch(args);
+	    public SelectionView(Stage s){
+	    	start(s);
 	    }
+	    
+//	    public static void main(String[] args) throws Exception{
+//	    	Game.loadHeroes("Heros.csv");
+//	    	launch(args);
+//	    }
 	    public void start(Stage primaryStage) {
+	    	
 	    	myButton selectedHero;
 	    	GridPane heroesSelector= new GridPane();
 	    	ToggleGroup g = new ToggleGroup();
@@ -103,7 +109,7 @@ public class SelectionView extends Application {
 	    	RadioButton hero8=new RadioButton();
 	    	hero8.setToggleGroup(g);
 	    	hero8.setOnAction(e -> {
-	            hero8.getStyleClass().add("RadioButton-clicked");
+	            hero8.getStyleClass().add("Radioutton-clicked");
 	    	});
 	    	hero8.setText("Name: "+Game.availableHeroes.get(7).getName()+"\nType Medic"+"\n HP: "+Game.availableHeroes.get(7).getMaxHp()+"\n AttackDmg: "+Game.availableHeroes.get(7).getAttackDmg()+"\n MaxActions: " +Game.availableHeroes.get(7).getActionsAvailable());
 	    	GridPane.setConstraints(hero1, 0, 0);
@@ -161,19 +167,19 @@ public class SelectionView extends Application {
 	         
 	         Button go= new Button();
 	         go.setText("Go to the game");
+	         go.setOnAction(e -> {
+	 			try {
+					Game.startGame(new Fighter("Bill", 2, 100, 1000));
+		        	 Game.loadHeroes("Heros.csv");
+
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        	MainView sv = new MainView(primaryStage);
+		        });
 	         
-	         Button start= new Button();
-	         start.setText("Go to the game");
-	         
-	         Button about= new Button();
-	         about.setText("About");
-	         
-	         Button Exist = new Button();
-	         Exist.setText("Exist");
-	         
-	         VBox begin=new VBox();
-	         begin.getChildren().addAll(start,about,Exist);
-	         
+	           
 	         
 	         talking.getChildren().addAll(choose,go);
 	         talking.setAlignment(Pos.CENTER);
@@ -183,7 +189,7 @@ public class SelectionView extends Application {
 		    	primaryStage.setScene(SelectingHero);
 		    	  SelectingHero.getStylesheets().add(
 		                  getClass().getResource("selection.css").toExternalForm());
-		    	  
+		    	   
 	    	primaryStage.show();
 	    	
 	    }
