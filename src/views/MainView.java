@@ -14,6 +14,8 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,9 +25,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.characters.Character;
 import model.characters.Direction;
+import model.characters.Fighter;
 import model.characters.Hero;
-import model.characters.Medic;
-import model.characters.Zombie;
 import model.world.Cell;
 import model.world.CharacterCell;
 import engine.Game;
@@ -45,7 +46,7 @@ public class MainView extends Application {
 
 	public static void main(String[] args) throws Exception {
 		Game.loadHeroes("Heros.csv");
-		Game.startGame(new Medic("Bill", 10, 100, 1000));
+		Game.startGame(new Fighter("Bill", 10, 100, 1000));
 		launch(args);
 	}
 
@@ -117,44 +118,93 @@ public class MainView extends Application {
 					selectedTargetButton = bttn;
 				}
 
-				bttn.setOnAction(e -> {
-
-					if (c instanceof CharacterCell) {
-						Character character = ((CharacterCell) c)
-								.getCharacter();
-						if (character instanceof Hero) {
-							Hero hero = (Hero) ((CharacterCell) c)
+				bttn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent mouseEvent) {
+						if (c instanceof CharacterCell
+								&& ((CharacterCell) c).getCharacter() != null) {
+							Character character = ((CharacterCell) c)
 									.getCharacter();
-							if (selectedHeroButton != null) { // new hero
-																// selected
-								selectedHeroButton.getStyleClass().remove(
-										"selected-hero");
-								herosBar.getChildren().remove(0);
+							if (mouseEvent.getButton().equals(
+									MouseButton.SECONDARY)) {
+
+								if (character instanceof Hero) {
+									Hero hero = (Hero) ((CharacterCell) c)
+											.getCharacter();
+									if (selectedHeroButton != null) { // new
+																		// hero
+										// selected
+										selectedHeroButton.getStyleClass()
+												.remove("selected-hero");
+										herosBar.getChildren().remove(0);
+									}
+									bttn.getStyleClass().add("selected-hero");
+									bttn.setStyle("-fx-border-width: 2px;");
+									herosBar.getChildren().add(0,
+											ViewHelpers.selectedHeroPane(hero));
+									selectedHeroButton = bttn;
+									selectedTargetButton.getStyleClass()
+											.remove("target");
+									selectedTargetButton = null;
+								}
 							}
-							bttn.getStyleClass().add("selected-hero");
-							bttn.setStyle("-fx-border-width: 2px;");
-							herosBar.getChildren().add(0,
-									ViewHelpers.selectedHeroPane(hero));
-							selectedHeroButton = bttn;
-						}
-						// ! We need somehow to check if the target is valid,
-						// maybe modyfing setTarget
-						// ! function to through and exception
-						else if (character instanceof Zombie
-								&& selectedHeroButton != null && c.isVisible()) {
-							if (selectedTargetButton != null) {
-								selectedTargetButton.getStyleClass().remove(
-										"target");
+
+							else {
+								if (c instanceof CharacterCell
+										&& selectedHeroButton != null) {
+									if (selectedTargetButton != null) {
+										selectedTargetButton.getStyleClass()
+												.remove("target");
+									}
+									bttn.getStyleClass().add("target");
+									selectedTargetButton = bttn;
+									((CharacterCell) selectedHeroButton.cell)
+											.getCharacter()
+											.setTarget(character);
+									herosBar.getChildren().remove(0);
+									loadSelected();
+								}
 							}
-							bttn.getStyleClass().add("target");
-							selectedTargetButton = bttn;
-							((CharacterCell) selectedHeroButton.cell)
-									.getCharacter().setTarget(character);
-							herosBar.getChildren().remove(0);
-							loadSelected();
 						}
 					}
 				});
+
+				// if (c instanceof CharacterCell) {
+				// Character character = ((CharacterCell) c)
+				// .getCharacter();
+				// if (character instanceof Hero) {
+				// Hero hero = (Hero) ((CharacterCell) c)
+				// .getCharacter();
+				// if (selectedHeroButton != null) { // new hero
+				// // selected
+				// selectedHeroButton.getStyleClass().remove(
+				// "selected-hero");
+				// herosBar.getChildren().remove(0);
+				// }
+				// bttn.getStyleClass().add("selected-hero");
+				// bttn.setStyle("-fx-border-width: 2px;");
+				// herosBar.getChildren().add(0,
+				// ViewHelpers.selectedHeroPane(hero));
+				// selectedHeroButton = bttn;
+				// }
+				// // ! We need somehow to check if the target is valid,
+				// // maybe modyfing setTarget
+				// // ! function to through and exception
+				// else if (character instanceof Zombie
+				// && selectedHeroButton != null && c.isVisible()) {
+				// if (selectedTargetButton != null) {
+				// selectedTargetButton.getStyleClass().remove(
+				// "target");
+				// }
+				// bttn.getStyleClass().add("target");
+				// selectedTargetButton = bttn;
+				// ((CharacterCell) selectedHeroButton.cell)
+				// .getCharacter().setTarget(character);
+				// herosBar.getChildren().remove(0);
+				// loadSelected();
+				// }
+				// }
+				// });
 
 				mapGrid.add(bttn, j, 14 - i);
 			}
@@ -253,8 +303,7 @@ public class MainView extends Application {
 					}
 
 					if (selectedHero != null) {
-						Zombie selectedTarget = (Zombie) selectedHero
-								.getTarget();
+						Character selectedTarget = selectedHero.getTarget();
 						if (selectedTarget == null) {
 							selectedTargetButton = null;
 						}
