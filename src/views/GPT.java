@@ -1,29 +1,53 @@
 package views;
 
+import java.util.concurrent.CountDownLatch;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GPT extends Application {
-    public void start(Stage primaryStage) {
-        ScrollPane scrollPane = new ScrollPane();
-        VBox content = new VBox();
-        Label label1 = new Label("Label 1");
-        Label label2 = new Label("Label 2");
-        content.getChildren().addAll(label1, label2);
-        scrollPane.setContent(content);
 
-        Scene scene = new Scene(scrollPane, 400, 300);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+	@Override
+	public void start(Stage primaryStage) {
+		Label label = new Label("Hello, JavaFX!");
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
+		StackPane root = new StackPane(label);
+		Scene scene = new Scene(root, 300, 200);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+		CountDownLatch latch = new CountDownLatch(1);
+
+		// Apply CSS style for 3 seconds
+		label.setStyle("-fx-background-color: yellow;");
+
+		Timeline timeline = new Timeline();
+		KeyFrame keyFrame = new KeyFrame(Duration.seconds(3), event -> {
+			// Reset CSS style after 3 seconds
+				label.setStyle("");
+				latch.countDown();
+			});
+		timeline.getKeyFrames().add(keyFrame);
+		timeline.play();
+
+		try {
+			latch.await(); // Wait until the latch count reaches zero
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// Continue with the rest of the program after the time ends
+		System.out.println("Time is up!");
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
