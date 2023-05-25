@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.characters.Character;
 import model.characters.Direction;
-import model.characters.Fighter;
 import model.characters.Hero;
+import model.characters.Medic;
 import model.characters.Zombie;
 import model.world.Cell;
 import model.world.CharacterCell;
@@ -45,7 +45,7 @@ public class MainView extends Application {
 
 	public static void main(String[] args) throws Exception {
 		Game.loadHeroes("Heros.csv");
-		Game.startGame(new Fighter("Bill", 2, 5, 1000));
+		Game.startGame(new Medic("Bill", 10, 100, 1000));
 		launch(args);
 	}
 
@@ -65,7 +65,7 @@ public class MainView extends Application {
 		herosBar.setSpacing(20);
 
 		interactingStatusBar = new HBox();
-		interactingStatusBar.getChildren().addAll(new Label("Fuck Deadlins"));
+		interactingStatusBar.getChildren().add(new Label("Fuck Deadlins"));
 		interactingStatusBar.getStyleClass().add("heros");
 		interactingStatusBar.setAlignment(Pos.CENTER);
 		interactingStatusBar.setPadding(new Insets(5, 5, 5, 5));
@@ -96,7 +96,7 @@ public class MainView extends Application {
 		root.setPadding(new Insets(10));
 		VBox tmpVbox = new VBox();
 		tmpVbox.getChildren().addAll(mapGrid, interactingStatusBar);
-		tmpVbox.setSpacing(5);
+		tmpVbox.setSpacing(10);
 		root.setCenter(tmpVbox);
 
 		for (int i = 0; i < 15; i++) {
@@ -118,6 +118,7 @@ public class MainView extends Application {
 				}
 
 				bttn.setOnAction(e -> {
+
 					if (c instanceof CharacterCell) {
 						Character character = ((CharacterCell) c)
 								.getCharacter();
@@ -155,7 +156,6 @@ public class MainView extends Application {
 					}
 				});
 
-				// mapGrid.add(bttn, i, 14 - j); WRONG
 				mapGrid.add(bttn, j, 14 - i);
 			}
 		}
@@ -166,9 +166,14 @@ public class MainView extends Application {
 
 	public static void loadSelected() {
 		if (selectedHeroButton != null) {
+			System.out.println(selectedHeroButton.cell);
 			Hero hero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 					.getCharacter();
-			herosBar.getChildren().add(0, ViewHelpers.selectedHeroPane(hero));
+
+			if (hero != null) {
+				herosBar.getChildren().add(0,
+						ViewHelpers.selectedHeroPane(hero));
+			}
 		}
 	}
 
@@ -192,7 +197,7 @@ public class MainView extends Application {
 
 			public void handle(KeyEvent key) {
 				try {
-					boolean x = true;
+					boolean wait = false;
 					Hero selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 							.getCharacter();
 					switch (key.getCode()) {
@@ -213,17 +218,28 @@ public class MainView extends Application {
 						break;
 					}
 					case A: {
-						selectedTargetButton.getStyleClass().add("damged");
-						x = false;
 						selectedHero.attack();
+						selectedTargetButton.getStyleClass().add("damged");
+						wait = true;
 
 						PauseTransition pauseTransition = new PauseTransition(
-								Duration.seconds(0.5));
+								Duration.seconds(1));
 						pauseTransition.setOnFinished(event -> {
 							fuckMap();
 						});
 
 						pauseTransition.play();
+						break;
+					}
+					case C: {
+						selectedHero.cure();
+						selectedTargetButton = null;
+						break;
+					}
+
+					case S: {
+						selectedHero.useSpecial();
+						break;
 					}
 					}
 
@@ -231,16 +247,25 @@ public class MainView extends Application {
 					selectedHeroButton.cell = Game.map[p.x][p.y];
 					selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 							.getCharacter();
-					Zombie selectedTarget = (Zombie) selectedHero.getTarget();
-					if (selectedHero == null)
+					if (selectedHero == null) {
 						selectedHeroButton = null;
-					if (selectedHero != null && selectedTarget == null)
 						selectedTargetButton = null;
-					if (x) {
+					}
+
+					if (selectedHero != null) {
+						Zombie selectedTarget = (Zombie) selectedHero
+								.getTarget();
+						if (selectedTarget == null) {
+							selectedTargetButton = null;
+						}
+
+					}
+					if (!wait) {
 						fuckMap();
 					}
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					((Label) interactingStatusBar.getChildren().get(0))
+							.setText("fucking Error " + e.getMessage());
 				}
 			}
 		});
