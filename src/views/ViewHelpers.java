@@ -73,7 +73,6 @@ public class ViewHelpers {
         }
         return pane;
     }
-
     public static Pane availableHeroInfo(Hero hero) {
         VBox pane = new VBox();
         String type = hero.getClass().toString().split("\\.")[2];

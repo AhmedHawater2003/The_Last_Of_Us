@@ -175,23 +175,23 @@ public class MainView extends Application {
 
             public void handle(KeyEvent key) {
                 try {
-                    Hero selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell).getCharacter();
-                    // System.out.println(selectedHeroButton.cell);
-                    switch (key.getCode()) {
-                        case W: {
+                 Hero selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell).getCharacter();
+                    System.out.println(key.getCode());
+               switch (key.getCode()) {
+                        case UP: {
                             selectedHero.move(Direction.UP);
-                            break;
+                        break;
                         }
-                        case D: {
+                        case RIGHT: {
                             selectedHero.move(Direction.RIGHT);
                             break;
                         }
-                        case A: {
+                        case LEFT: {
                             selectedHero.move(Direction.LEFT);
                             break;
                         }
-                        case S: {
-                            selectedHero.move(Direction.DOWN);
+                        case DOWN: {
+                        	selectedHero.move(Direction.DOWN);
                             break;
                         }
                     }
@@ -199,7 +199,8 @@ public class MainView extends Application {
                     selectedHeroButton.cell = Game.map[p.x][p.y];
                     // System.out.println(selectedHeroButton.cell);
                     fuckMap();
-                } catch (Exception e) {
+       } 
+                        catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }

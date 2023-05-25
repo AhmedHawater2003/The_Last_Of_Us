@@ -65,7 +65,7 @@ public abstract class Character {
 	public void removeCharacter(Character character, ArrayList<Hero> heroes, ArrayList<Zombie> zombies) {
 		if (character instanceof Hero) {
 			Game.deadCharactersLocations.add(this.getLocation());
-			((Hero) character).setAdjCellsVisiblity(false);
+			//((Hero) character).setAdjCellsVisiblity(false);
 			heroes.remove((Hero) character);
 		} else if (character instanceof Zombie) {
 			Game.zombies.remove(character);
