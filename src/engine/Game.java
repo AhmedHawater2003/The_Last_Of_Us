@@ -34,6 +34,7 @@ public class Game {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
 	}
+	
 
 	public static int zombieCount() {
 		int c = 0;

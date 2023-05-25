@@ -39,32 +39,40 @@ public class myButton extends Button {
     public myButton(Cell cell) {
         this.cell = cell;
         this.setPrefSize(mapWidth / 15, mapHeight / 15);
-        if(cell instanceof CharacterCell) {
-            if(((CharacterCell) cell).getCharacter() instanceof Hero) {
-                this.asHero();
-            } else if (((CharacterCell) cell).getCharacter() instanceof Zombie){
-                this.asZombie();
+        this.updateButtonView();
+    }
+
+    public void updateButtonView() {
+        if (!cell.isVisible()) {
+            this.setEffect(new javafx.scene.effect.GaussianBlur(10.5));
+            this.setId("blured");
+        } else {
+
+            if (cell instanceof CharacterCell) {
+                if (((CharacterCell) cell).getCharacter() instanceof Hero) {
+                    asHero();
+                } else if (((CharacterCell) cell).getCharacter() instanceof Zombie) {
+                    asZombie();
+                } else {
+                    asEmpty();
+                }
+
+            } else if (cell instanceof CollectibleCell) {
+                if (((CollectibleCell) cell).getCollectible() instanceof Supply) {
+                    asSupply();
+                } else {
+                    asVaccine();
+                }
+            } else {
+                asTrap();
             }
-            else {
-                this.asEmpty();
-            }
-        } else if(cell instanceof CollectibleCell){
-            if(((CollectibleCell)cell).getCollectible() instanceof Supply){
-                this.asSupply();
-            }
-            else{
-                this.asVaccine();
-            }
-        }
-        else{
-            this.asTrap();
         }
     }
 
     public ImageView getImageView(String path) {
         ImageView view = new ImageView(path);
-        view.setFitHeight(mapHeight / 23);
-        view.setFitWidth(mapWidth / 23);
+        view.setFitHeight(mapHeight / 25);
+        view.setFitWidth(mapWidth / 25);
         return view;
     }
 
@@ -83,6 +91,9 @@ public class myButton extends Button {
         if (!cell.isVisible()) {
             this.setEffect(new javafx.scene.effect.GaussianBlur(10.5));
             this.setId("blured");
+        } else {
+            this.setEffect(null);
+            this.setId(null);
         }
     }
 

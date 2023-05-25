@@ -41,9 +41,7 @@ public class mapLoader {
 
     public static double mapWidth = WIDTH - WIDTH / 6, mapHeight = HEIGHT - HEIGHT / 15;
 
-    public static int getGridIndex(Point p) {
-        return p.y * 15 + p.x;
-    }
+
 
     public static myButton ahmed(Cell cell) {
         myButton bttn = new myButton(cell);

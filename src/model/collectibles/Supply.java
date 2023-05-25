@@ -19,4 +19,8 @@ public class Supply implements Collectible {
 		h.getSupplyInventory().remove(this);
 
 	}
+
+	public String toString(){
+		return "S";
+	}
 }

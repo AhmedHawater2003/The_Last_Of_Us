@@ -1,7 +1,6 @@
 .button{
-    -fx-background-color: rgba(255, 255, 255, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
-    -fx-border-color:rgb(10, 28, 1); 
-    -fx-border-width: 2px; /* Adjust the border width as desired */
+    -fx-background-color: rgba(167, 167, 167, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
+    -fx-background-radius: 10px;
 }
 
 #blured{
@@ -146,5 +145,11 @@
 .selected-hero{
   -fx-border-color:linear-gradient(from 0% 0% to 100% 100%, #ffffff, #e2cd0e);
   -fx-border-width: 5px;
+  -fx-border-radius: 5px;
+}
+
+.target{
+  -fx-border-color:rgb(148, 1, 1);
+  -fx-border-width: 2px;
   -fx-border-radius: 5px;
 }

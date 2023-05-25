@@ -33,4 +33,8 @@ public class Vaccine implements Collectible {
 
 	}
 
+	public String toString(){
+		return "V";
+	}
+
 }
