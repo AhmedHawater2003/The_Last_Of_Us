@@ -46,7 +46,7 @@ public class MainView extends Application {
 
 	public static void main(String[] args) throws Exception {
 		Game.loadHeroes("Heros.csv");
-		Game.startGame(new Fighter("Bill", 10, 100, 1000));
+		Game.startGame(new Fighter("Bill", 100, 100, 1000));
 		launch(args);
 	}
 
@@ -143,9 +143,11 @@ public class MainView extends Application {
 									herosBar.getChildren().add(0,
 											ViewHelpers.selectedHeroPane(hero));
 									selectedHeroButton = bttn;
-									selectedTargetButton.getStyleClass()
-											.remove("target");
-									selectedTargetButton = null;
+									if (selectedTargetButton != null) {
+										selectedTargetButton.getStyleClass()
+												.remove("target");
+										selectedTargetButton = null;
+									}
 								}
 							}
 
@@ -169,43 +171,6 @@ public class MainView extends Application {
 					}
 				});
 
-				// if (c instanceof CharacterCell) {
-				// Character character = ((CharacterCell) c)
-				// .getCharacter();
-				// if (character instanceof Hero) {
-				// Hero hero = (Hero) ((CharacterCell) c)
-				// .getCharacter();
-				// if (selectedHeroButton != null) { // new hero
-				// // selected
-				// selectedHeroButton.getStyleClass().remove(
-				// "selected-hero");
-				// herosBar.getChildren().remove(0);
-				// }
-				// bttn.getStyleClass().add("selected-hero");
-				// bttn.setStyle("-fx-border-width: 2px;");
-				// herosBar.getChildren().add(0,
-				// ViewHelpers.selectedHeroPane(hero));
-				// selectedHeroButton = bttn;
-				// }
-				// // ! We need somehow to check if the target is valid,
-				// // maybe modyfing setTarget
-				// // ! function to through and exception
-				// else if (character instanceof Zombie
-				// && selectedHeroButton != null && c.isVisible()) {
-				// if (selectedTargetButton != null) {
-				// selectedTargetButton.getStyleClass().remove(
-				// "target");
-				// }
-				// bttn.getStyleClass().add("target");
-				// selectedTargetButton = bttn;
-				// ((CharacterCell) selectedHeroButton.cell)
-				// .getCharacter().setTarget(character);
-				// herosBar.getChildren().remove(0);
-				// loadSelected();
-				// }
-				// }
-				// });
-
 				mapGrid.add(bttn, j, 14 - i);
 			}
 		}
@@ -216,7 +181,7 @@ public class MainView extends Application {
 
 	public static void loadSelected() {
 		if (selectedHeroButton != null) {
-			System.out.println(selectedHeroButton.cell);
+			// System.out.println(selectedHeroButton.cell);
 			Hero hero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 					.getCharacter();
 
@@ -273,7 +238,7 @@ public class MainView extends Application {
 						wait = true;
 
 						PauseTransition pauseTransition = new PauseTransition(
-								Duration.seconds(1));
+								Duration.seconds(0.5));
 						pauseTransition.setOnFinished(event -> {
 							fuckMap();
 						});
@@ -290,6 +255,9 @@ public class MainView extends Application {
 					case S: {
 						selectedHero.useSpecial();
 						break;
+					}
+					case E: {
+						Game.endTurn();
 					}
 					}
 
@@ -311,6 +279,22 @@ public class MainView extends Application {
 					}
 					if (!wait) {
 						fuckMap();
+						if (selectedHero.isTrapped) {
+							selectedHero.applyDamgeTaken();
+
+							selectedHeroButton.getStyleClass().add("damged");
+
+							PauseTransition pauseTransition = new PauseTransition(
+									Duration.seconds(1));
+							pauseTransition.setOnFinished(event -> {
+								selectedHeroButton.getStyleClass().remove(
+										"damged");
+								fuckMap();
+							});
+							pauseTransition.play();
+
+						}
+
 					}
 				} catch (Exception e) {
 					((Label) interactingStatusBar.getChildren().get(0))
@@ -318,8 +302,8 @@ public class MainView extends Application {
 				}
 			}
 		});
-		fuckMap();
 
+		fuckMap();
 		primaryStage.show();
 
 	}
