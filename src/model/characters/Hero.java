@@ -1,9 +1,3 @@
-
-
-
-
-
-
 package model.characters;
 
 import java.awt.Point;
@@ -118,7 +112,8 @@ public abstract class Hero extends Character {
 	public void move(Direction d) throws MovementException,
 			NotEnoughActionsException {
 		if (this.actionsAvailable <= 0) {
-			throw new NotEnoughActionsException();
+			throw new NotEnoughActionsException(
+					"Fuuuuckkk youuuuu Mafeesh khra action point ya a3maaaa");
 		}
 		if (this.getCurrentHp() <= 0) {
 			this.onCharacterDeath();

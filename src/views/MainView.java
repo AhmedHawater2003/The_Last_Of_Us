@@ -3,7 +3,6 @@ package views;
 import java.awt.Point;
 
 import javafx.animation.PauseTransition;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,17 +20,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.characters.Character;
 import model.characters.Direction;
-import model.characters.Fighter;
 import model.characters.Hero;
 import model.world.Cell;
 import model.world.CharacterCell;
 import engine.Game;
 
-public class MainView extends Application {
+public class MainView {
 	public static final double WIDTH = Screen.getPrimary().getBounds()
 			.getWidth();
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
@@ -43,34 +40,36 @@ public class MainView extends Application {
 	public static VBox herosBar;
 	public static HBox interactingStatusBar;
 	public static VBox controllabeleHeros;
-	
-	public MainView(Stage s, Hero h){
-		try{
-		Game.loadHeroes("Heros.csv");
-		Game.startGame(h);
-		myButton.loadingIconsDict();
-		ViewHelpers.loadingIconsDict();
-		start(s);
-		}
-		catch(Exception e){
-			System.out.println("Fuuuuck");
-		}
-		
-		
-	}
 
-//	public static void main(String[] args) throws Exception {
-//		Game.loadHeroes("Heros.csv");
-//		Game.startGame(new Fighter("Bill", 100, 100, 1000));
-//		myButton.loadingIconsDict();
-//		ViewHelpers.loadingIconsDict();
-//		launch(args);
-//	}
+	public static boolean isInteractable = true;
+
+	// public MainView(Stage s, Hero h) {
+	// try {
+	// Game.loadHeroes("Heros.csv");
+	// Game.startGame(h);
+	// myButton.loadingIconsDict();
+	// ViewHelpers.loadingIconsDict();
+	// start(s);
+	// } catch (Exception e) {
+	// System.out.println("Fuuuuck");
+	// }
+	// }
+
+	// public static void main(String[] args) throws Exception {
+	// Game.loadHeroes("Heros.csv");
+	// Game.startGame(new Fighter("Bill", 100, 100, 1000));
+	// myButton.loadingIconsDict();
+	// ViewHelpers.loadingIconsDict();
+	// launch(args);
+	// }
 
 	public static myButton selectedHeroButton;
 	public static myButton selectedTargetButton;
 
 	public static void fuckMap() {
+		if (!isInteractable) {
+			return;
+		}
 		mapGrid = new GridPane();
 		herosBar = new VBox();
 
@@ -213,14 +212,13 @@ public class MainView extends Application {
 		return p.y * 15 + p.x;
 	}
 
-	@Override
-	public void start(Stage primaryStage) {
-		primaryStage.setTitle("The Last of Us");
-		primaryStage.setMaximized(true);
-		primaryStage.setScene(MainScene);
-
-		MainScene.getStylesheets().add(
-				getClass().getResource("styles.css").toExternalForm());
+	public static Scene start() {
+		// primaryStage.setTitle("The Last of Us");
+		// primaryStage.setMaximized(true);
+		// primaryStage.setScene(MainScene);
+		//
+		// MainScene.getStylesheets().add(
+		// getClass().getResource("styles.css").toExternalForm());
 
 		ImageView background = new ImageView(new Image("views\\BG1.jpg", 1980,
 				1080, true, true));
@@ -228,8 +226,13 @@ public class MainView extends Application {
 		MainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			public void handle(KeyEvent key) {
+				if (!isInteractable) {
+					return;
+				}
 				try {
 					boolean wait = false;
+					if (selectedHeroButton == null)
+						System.out.println("lol");
 					Hero selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 							.getCharacter();
 					switch (key.getCode()) {
@@ -238,6 +241,9 @@ public class MainView extends Application {
 						break;
 					}
 					case RIGHT: {
+						if (selectedHero == null) {
+							System.out.println("lol");
+						}
 						selectedHero.move(Direction.RIGHT);
 						break;
 					}
@@ -253,10 +259,12 @@ public class MainView extends Application {
 						selectedHero.attack();
 						selectedTargetButton.getStyleClass().add("damged");
 						wait = true;
+						isInteractable = false;
 
 						PauseTransition pauseTransition = new PauseTransition(
 								Duration.seconds(0.5));
 						pauseTransition.setOnFinished(event -> {
+							isInteractable = true;
 							fuckMap();
 						});
 
@@ -300,12 +308,13 @@ public class MainView extends Application {
 							selectedHero.applyDamgeTaken();
 
 							selectedHeroButton.getStyleClass().add("damged");
-
+							isInteractable = false;
 							PauseTransition pauseTransition = new PauseTransition(
 									Duration.seconds(1));
 							pauseTransition.setOnFinished(event -> {
 								selectedHeroButton.getStyleClass().remove(
 										"damged");
+								isInteractable = true;
 								fuckMap();
 							});
 							pauseTransition.play();
@@ -321,7 +330,8 @@ public class MainView extends Application {
 		});
 
 		fuckMap();
-		primaryStage.show();
+		return MainScene;
+		// primaryStage.show();
 
 	}
 }
