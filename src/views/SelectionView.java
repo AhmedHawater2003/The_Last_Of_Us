@@ -1,5 +1,6 @@
 package views;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,9 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.characters.Fighter;
+import model.characters.Hero;
 import engine.Game;
 
 public class SelectionView {
@@ -21,6 +23,7 @@ public class SelectionView {
 			.getWidth();
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
 			.getHeight();
+	public static Hero selected = Game.availableHeroes.get(0);
 
 	// public SelectionView(Stage s) {
 	// start(s);
@@ -34,109 +37,172 @@ public class SelectionView {
 
 		myButton selectedHero;
 		GridPane heroesSelector = new GridPane();
+		heroesSelector.setHgap(10);
+		heroesSelector.setVgap(10);
 		ToggleGroup g = new ToggleGroup();
 		RadioButton hero1 = new RadioButton();
-		hero1.setToggleGroup(g);
-		// Image image = new Image("views\\joel.png"); // Replace with the
-		// actual path to your image file
-		// ImageView imageView = new ImageView(image);
-		// imageView.setFitWidth(150); // Set the desired width of the image
-		// imageView.setFitHeight(150);
-		// hero1.setGraphic(imageView);
-		// hero1.graphicProperty();
-		// hero1.autosize();
 
-		// if (selectedHero != null) {
-		// hero1.getStyleClass().add("selected-hero");
-		// hero1.setStyle("-fx-border-width: 2px;");
-		// selectedHero = hero1;
-		// }
+		hero1.setToggleGroup(g);
+		Image image1 = new Image("views\\joel.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView1 = new ImageView(image1);
+		imageView1.setPreserveRatio(true);
+		imageView1.setFitWidth(200);
+		hero1.setGraphic(imageView1);
+		hero1.graphicProperty();
+		hero1.autosize();
+
 		hero1.setOnAction(e -> {
+			selected = Game.availableHeroes.get(0);
 			hero1.getStyleClass().add("RadioButton-clicked");
 		});
-		hero1.setText("Name: " + Game.availableHeroes.get(0).getName()
-				+ "\nType: Fighter" + "\n HP: "
-				+ Game.availableHeroes.get(0).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(0).getAttackDmg()
+		hero1.setText(Game.availableHeroes.get(0).getName() + "\nType: Fighter"
+				+ "\n HP: " + Game.availableHeroes.get(0).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(0).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(0).getActionsAvailable());
 		RadioButton hero2 = new RadioButton();
 		hero2.setToggleGroup(g);
+		Image image2 = new Image("views\\ellie.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView2 = new ImageView(image2);
+		imageView2.setPreserveRatio(true);
+		imageView2.setFitWidth(200);
+		hero2.setGraphic(imageView2);
+		hero2.graphicProperty();
+		hero2.autosize();
 		hero2.setOnAction(e -> {
+			selected = Game.availableHeroes.get(1);
 			hero2.getStyleClass().add("RadioButton-clicked");
 		});
-		hero2.setText("Name: " + Game.availableHeroes.get(1).getName()
-				+ "\nType: Medic" + "\n HP: "
-				+ Game.availableHeroes.get(1).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(1).getAttackDmg()
+		hero2.setText(Game.availableHeroes.get(1).getName() + "\nType: Medic"
+				+ "\n HP: " + Game.availableHeroes.get(1).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(1).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(1).getActionsAvailable());
 		RadioButton hero3 = new RadioButton();
 		hero3.setToggleGroup(g);
+		Image image3 = new Image("views\\tess.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView3 = new ImageView(image3);
+		imageView3.setPreserveRatio(true);
+		imageView3.setFitWidth(200);
+		hero3.setGraphic(imageView3);
+		hero3.graphicProperty();
+		hero3.autosize();
 		hero3.setOnAction(e -> {
+			selected = Game.availableHeroes.get(2);
 			hero3.getStyleClass().add("RadioButton-clicked");
 		});
-		hero3.setText("Name: " + Game.availableHeroes.get(2).getName()
-				+ "\nType Explorer" + "\n HP: "
-				+ Game.availableHeroes.get(2).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(2).getAttackDmg()
+		hero3.setText(Game.availableHeroes.get(2).getName() + "\nType Explorer"
+				+ "\n HP: " + Game.availableHeroes.get(2).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(2).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(2).getActionsAvailable());
 		RadioButton hero4 = new RadioButton();
 		hero4.setToggleGroup(g);
+		Image image4 = new Image("views\\riley.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView4 = new ImageView(image4);
+		imageView4.setPreserveRatio(true);
+		imageView4.setFitWidth(200);
+		hero4.setGraphic(imageView4);
+		hero4.graphicProperty();
+		hero4.autosize();
 		hero4.setOnAction(e -> {
+			selected = Game.availableHeroes.get(3);
 			hero4.getStyleClass().add("RadioButton-clicked");
 		});
-		hero4.setText("Name: " + Game.availableHeroes.get(3).getName()
-				+ "\nType Explorer" + "\n HP: "
-				+ Game.availableHeroes.get(3).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(3).getAttackDmg()
+		hero4.setText(Game.availableHeroes.get(3).getName() + "\nType Explorer"
+				+ "\n HP: " + Game.availableHeroes.get(3).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(3).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(3).getActionsAvailable());
 		RadioButton hero5 = new RadioButton();
 		hero5.setToggleGroup(g);
+		Image image5 = new Image("views\\tommy.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView5 = new ImageView(image5);
+		imageView5.setPreserveRatio(true);
+		imageView5.setFitWidth(200);
+		hero5.setGraphic(imageView5);
+		hero5.graphicProperty();
+		hero5.autosize();
 		hero5.setOnAction(e -> {
+			selected = Game.availableHeroes.get(4);
 			hero5.getStyleClass().add("RadioButton-clicked");
 		});
-		hero5.setText("Name: " + Game.availableHeroes.get(4).getName()
-				+ "\nType Explorer" + "\n HP: "
-				+ Game.availableHeroes.get(4).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(4).getAttackDmg()
+		hero5.setText(Game.availableHeroes.get(4).getName() + "\nType Explorer"
+				+ "\n HP: " + Game.availableHeroes.get(4).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(4).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(4).getActionsAvailable());
+
 		RadioButton hero6 = new RadioButton();
 		hero6.setToggleGroup(g);
+		Image image6 = new Image("views\\bill.png");
+		ImageView imageView6 = new ImageView(image6);
+		imageView6.setPreserveRatio(true);
+		imageView6.setFitWidth(200);
+		hero6.setGraphic(imageView6);
+		hero6.graphicProperty();
+		hero6.autosize();
 		hero6.setOnAction(e -> {
+			selected = Game.availableHeroes.get(5);
 			hero6.getStyleClass().add("RadioButton-clicked");
 		});
-		hero6.setText("Name: " + Game.availableHeroes.get(5).getName()
-				+ "\nType Medic" + "\n HP: "
-				+ Game.availableHeroes.get(5).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(5).getAttackDmg()
+		hero6.setText(Game.availableHeroes.get(5).getName() + "\nType Medic"
+				+ "\n HP: " + Game.availableHeroes.get(5).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(5).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(5).getActionsAvailable());
+
 		RadioButton hero7 = new RadioButton();
 		hero7.setToggleGroup(g);
+		Image image7 = new Image("views\\david.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView7 = new ImageView(image7);
+		imageView7.setPreserveRatio(true);
+		imageView7.setFitWidth(200);
+		hero7.setGraphic(imageView7);
+		hero7.graphicProperty();
+		hero7.autosize();
 		hero7.setOnAction(e -> {
+			selected = Game.availableHeroes.get(6);
 			hero7.getStyleClass().add("RadioButton-clicked");
 		});
-		hero7.setText("Name: " + Game.availableHeroes.get(6).getName()
-				+ "\nType Fighter" + "\n HP: "
-				+ Game.availableHeroes.get(6).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(6).getAttackDmg()
+		hero7.setText(Game.availableHeroes.get(6).getName() + "\nType Fighter"
+				+ "\n HP: " + Game.availableHeroes.get(6).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(6).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(6).getActionsAvailable());
 		RadioButton hero8 = new RadioButton();
 		hero8.setToggleGroup(g);
+		Image image8 = new Image("views\\henry.png"); // Replace with the actual
+														// path to your image
+														// file
+		ImageView imageView8 = new ImageView(image8);
+		imageView8.setPreserveRatio(true);
+		imageView8.setFitWidth(200);
+		hero8.setGraphic(imageView8);
+		hero8.graphicProperty();
+		hero8.autosize();
 		hero8.setOnAction(e -> {
+			selected = Game.availableHeroes.get(7);
 			hero8.getStyleClass().add("Radioutton-clicked");
 		});
-		hero8.setText("Name: " + Game.availableHeroes.get(7).getName()
-				+ "\nType Medic" + "\n HP: "
-				+ Game.availableHeroes.get(7).getMaxHp() + "\n AttackDmg: "
-				+ Game.availableHeroes.get(7).getAttackDmg()
+		hero8.setText(Game.availableHeroes.get(7).getName() + "\nType Medic"
+				+ "\n HP: " + Game.availableHeroes.get(7).getMaxHp()
+				+ "\n AttackDmg: " + Game.availableHeroes.get(7).getAttackDmg()
 				+ "\n MaxActions: "
 				+ Game.availableHeroes.get(7).getActionsAvailable());
+
 		GridPane.setConstraints(hero1, 0, 0);
 		heroesSelector.getChildren().add(hero1);
 		GridPane.setConstraints(hero2, 1, 0);
@@ -154,14 +220,14 @@ public class SelectionView {
 		GridPane.setConstraints(hero8, 1, 2);
 		heroesSelector.getChildren().add(hero8);
 		heroesSelector.setAlignment(Pos.CENTER_RIGHT);
-		hero1.setMinSize(300, 300);
-		hero2.setMinSize(300, 300);
-		hero3.setMinSize(300, 300);
-		hero4.setMinSize(300, 300);
-		hero5.setMinSize(300, 300);
-		hero6.setMinSize(300, 300);
-		hero7.setMinSize(300, 300);
-		hero8.setMinSize(300, 300);
+		hero1.setMinSize(100, 100);
+		hero2.setMinSize(100, 100);
+		hero3.setMinSize(100, 100);
+		hero4.setMinSize(100, 100);
+		hero5.setMinSize(100, 100);
+		hero6.setMinSize(100, 100);
+		hero7.setMinSize(100, 100);
+		hero8.setMinSize(100, 100);
 
 		BorderPane bord = new BorderPane();
 		ImageView background = new ImageView(new Image(
@@ -171,45 +237,23 @@ public class SelectionView {
 		bord.setCenter(heroesSelector);
 
 		VBox talking = new VBox();
-		Label choose = new Label(
-				"  			 In the wake of a devastating zombie outbreak, "
-						+ "\n			 darkness engulfs the world,"
-						+ "\n			 teeming with hordes of the undead. Amidst this harrowing chaos, "
-						+ "\n			 courageous heroes emerge from the shadows,"
-						+ "\n			 ready to wage a desperate "
-						+ "\n			 battle for humanity's survival."
-						+ "\n			 As a hero of unparalleled prowess, "
-						+ "\n 			 you step forward,"
-						+ "\n			 armed with unwavering determination and an arsenal of "
-						+ "\n			 skills. The fate of the remnants of civilization rests in your hands."
-						+ "\n 			 Will you rise as the savior,"
-						+ "\n			 leading a band of survivors with your tactical "
-						+ "\n			 brilliance? Or shall you unleash relentless fury as a lone warrior,"
-						+ "\n			 striking "
-						+ "\n			 fear into the hearts of the undead? The time has come to confront the "
-						+ "\n			 abominations that haunt this post-apocalyptic realm. "
-						+ "\n			 Brace yourself, hero, "
-						+ "\n			 for an epic journey awaits, where your choices will shape the destiny of "
-						+ "\n			 both the living and the undead.");
 
 		Button go = new Button();
 		go.setText("Go to the game");
+		go.getStyleClass().add("ipad-dark-grey");
+
 		go.setOnAction(e -> {
-
-			//
-			// MainScene.getStylesheets().add(
-			// getClass().getResource("styles.css").toExternalForm());
 			try {
-				ViewHelpers.loadingIconsDict();
-				myButton.loadingIconsDict();
-				Game.loadHeroes("Heros.csv");
-				Game.startGame(new Fighter("Bill", 100, 100, 100));
-
-				Scene mainScene = MainView.start();
-				mainScene.getStylesheets().add("views/styles.css");
-				primaryStage.setTitle("The Last of Us");
-				primaryStage.setMaximized(true);
-				primaryStage.setScene(mainScene);
+				// ViewHelpers.loadingIconsDict();
+				// myButton.loadingIconsDict();
+				// Game.loadHeroes("Heros.csv");
+				// Game.startGame(selected);
+				//
+				// Scene mainScene = MainView.start();
+				// mainScene.getStylesheets().add("views/styles.css");
+				// primaryStage.setTitle("The Last of Us");
+				// primaryStage.setMaximized(true);
+				// primaryStage.setScene(mainScene);
 
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -218,17 +262,24 @@ public class SelectionView {
 
 		});
 
-		talking.getChildren().addAll(choose, go);
-		talking.setAlignment(Pos.CENTER);
-		bord.setLeft(talking);
+		Label choose = new Label(
+				" Welcome to the apocalypse. The fate of the world rests in your hands. Who will you become in this desperate fight for survival?");
+		choose.setTextAlignment(TextAlignment.CENTER);
+		choose.setWrapText(true);
+		choose.setPrefWidth(590);
+		choose.setTextAlignment(TextAlignment.CENTER);
 
+		talking.getChildren().addAll(choose, go);
+		talking.setSpacing(20);
+		go.setAlignment(Pos.CENTER);
+		bord.setLeft(talking);
+		// bord.setMinSize(900, 900);
+		bord.setPadding(new Insets(10, 10, 10, 10));
+		talking.setAlignment(Pos.TOP_CENTER);
 		Scene SelectingHero = new Scene(bord);
-		// primaryStage.setScene(SelectingHero);
 		SelectingHero.getStylesheets().add("views/selection.css");
-		// getClass().getResource("selection.css").toExternalForm());
-		//
-		// primaryStage.show();
 		return SelectingHero;
 
 	}
+
 }

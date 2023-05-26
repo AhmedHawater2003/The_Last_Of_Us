@@ -1,8 +1,10 @@
 package views;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,15 +22,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.characters.Character;
 import model.characters.Direction;
+import model.characters.Fighter;
 import model.characters.Hero;
+import model.characters.Zombie;
 import model.world.Cell;
 import model.world.CharacterCell;
 import engine.Game;
 
-public class MainView {
+public class MainView extends Application { // TODO : Remove Later
 	public static final double WIDTH = Screen.getPrimary().getBounds()
 			.getWidth();
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
@@ -42,6 +47,10 @@ public class MainView {
 	public static VBox controllabeleHeros;
 
 	public static boolean isInteractable = true;
+	public static myButton selectedHeroButton;
+	public static myButton selectedTargetButton;
+
+	public static ArrayList<myButton> zombieButtons = new ArrayList<myButton>();
 
 	// public MainView(Stage s, Hero h) {
 	// try {
@@ -55,16 +64,13 @@ public class MainView {
 	// }
 	// }
 
-	// public static void main(String[] args) throws Exception {
-	// Game.loadHeroes("Heros.csv");
-	// Game.startGame(new Fighter("Bill", 100, 100, 1000));
-	// myButton.loadingIconsDict();
-	// ViewHelpers.loadingIconsDict();
-	// launch(args);
-	// }
-
-	public static myButton selectedHeroButton;
-	public static myButton selectedTargetButton;
+	public static void main(String[] args) throws Exception {
+		Game.loadHeroes("Heros.csv");
+		Game.startGame(new Fighter("Bill", 100, 100, 1000));
+		myButton.loadingIconsDict();
+		ViewHelpers.loadingIconsDict();
+		launch(args);
+	}
 
 	public static void fuckMap() {
 		if (!isInteractable) {
@@ -116,6 +122,7 @@ public class MainView {
 		tmpVbox.setSpacing(10);
 		root.setCenter(tmpVbox);
 
+		zombieButtons.clear();
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				Cell c = Game.map[i][j];
@@ -132,6 +139,11 @@ public class MainView {
 						&& selectedTargetButton.cell.equals(c)) {
 					bttn.getStyleClass().add("target");
 					selectedTargetButton = bttn;
+				}
+
+				if (c instanceof CharacterCell
+						&& ((CharacterCell) c).getCharacter() instanceof Zombie) {
+					zombieButtons.add(bttn);
 				}
 
 				bttn.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -212,7 +224,7 @@ public class MainView {
 		return p.y * 15 + p.x;
 	}
 
-	public static Scene start() {
+	public void start(Stage primaryStage) {
 		// primaryStage.setTitle("The Last of Us");
 		// primaryStage.setMaximized(true);
 		// primaryStage.setScene(MainScene);
@@ -231,10 +243,15 @@ public class MainView {
 				}
 				try {
 					boolean wait = false;
+					Hero selectedHero = null;
 					if (selectedHeroButton == null)
-						System.out.println("lol");
-					Hero selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell)
-							.getCharacter();
+						System.out
+								.println("selectedHeroisNull and key is pressed");
+					else {
+						selectedHero = (Hero) ((CharacterCell) selectedHeroButton.cell)
+								.getCharacter();
+					}
+
 					switch (key.getCode()) {
 					case UP: {
 						selectedHero.move(Direction.UP);
@@ -282,7 +299,30 @@ public class MainView {
 						break;
 					}
 					case E: {
-						Game.endTurn();
+
+						wait = true;
+						isInteractable = false;
+						System.out.println(zombieButtons.size());
+						for (myButton zombieBttn : zombieButtons) {
+							zombieBttn.getStyleClass().add("target");
+						}
+
+						PauseTransition pauseTransition = new PauseTransition(
+								Duration.seconds(0.5));
+						pauseTransition.setOnFinished(event -> {
+							isInteractable = true;
+							try {
+								Game.endTurn();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							fuckMap();
+						});
+
+						pauseTransition.play();
+
+						//
 					}
 					}
 
@@ -330,8 +370,13 @@ public class MainView {
 		});
 
 		fuckMap();
-		return MainScene;
-		// primaryStage.show();
+		// return MainScene;
+		MainScene.getStylesheets().add("views/styles.css");
+		primaryStage.setTitle("The Last of Us");
+		primaryStage.setMaximized(true);
+		primaryStage.setScene(MainScene);
+		primaryStage.show();
 
 	}
+
 }

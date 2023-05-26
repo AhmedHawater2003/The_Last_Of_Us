@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import exceptions.InvalidTargetException;
-import exceptions.NotEnoughActionsException;
 import model.characters.Character;
 import model.characters.Hero;
 import model.characters.HeroType;
@@ -19,6 +17,8 @@ import model.world.Cell;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.TrapCell;
+import exceptions.InvalidTargetException;
+import exceptions.NotEnoughActionsException;
 
 public class Game {
 
@@ -29,12 +29,12 @@ public class Game {
 	public static ArrayList<Point> deadCharactersLocations = new ArrayList<Point>();
 	public static ArrayList<Hero> heroes = new ArrayList<Hero>();
 	public static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	public static ArrayList<Zombie> zombiesTmpList = new ArrayList<Zombie>();
 
 	public static void main(String[] args) throws IOException {
 		loadHeroes("Heros.csv");
 		startGame(availableHeroes.get(0));
 	}
-	
 
 	public static int zombieCount() {
 		int c = 0;
@@ -50,7 +50,8 @@ public class Game {
 		return c;
 	}
 
-	public static void endTurn() throws InvalidTargetException, NotEnoughActionsException {
+	public static void endTurn() throws InvalidTargetException,
+			NotEnoughActionsException {
 
 		setAllCellsVisibility(false);
 		for (Hero h : heroes) {
@@ -63,11 +64,10 @@ public class Game {
 		// ! from the list while traversing the list, which might
 		// ! lead to an error
 
-		ArrayList<Zombie> tempList = new ArrayList<Zombie>();
 		for (Zombie z : zombies)
-			tempList.add(z);
+			zombiesTmpList.add(z);
 
-		for (Zombie z : tempList) {
+		for (Zombie z : zombiesTmpList) {
 			z.attack();
 			z.setTarget(null);
 		}
@@ -77,6 +77,24 @@ public class Game {
 		freeCellsLocations.addAll(deadCharactersLocations);
 		deadCharactersLocations.clear();
 
+	}
+
+	public static void head() {
+		setAllCellsVisibility(false);
+		for (Hero h : heroes) {
+			h.resetVariables();
+			h.generateAdjLocations();
+			h.setAdjCellsVisiblity(true);
+		}
+		for (Zombie z : zombies)
+			zombiesTmpList.add(z);
+	}
+
+	public static void tail() {
+		Character.spawnZombie();
+		freeCellsLocations.addAll(deadCharactersLocations);
+		deadCharactersLocations.clear();
+		zombiesTmpList.clear();
 	}
 
 	public static void setAllCellsVisibility(boolean isVisible) {
@@ -118,8 +136,8 @@ public class Game {
 	}
 
 	public static void clearingGameLists() {
-//		heroes.clear();
-//		zombies.clear();
+		// heroes.clear();
+		// zombies.clear();
 		freeCellsLocations.clear();
 		deadCharactersLocations.clear();
 	}
@@ -133,10 +151,12 @@ public class Game {
 
 	public static void spwaningRandomZombies() {
 		for (int i = 0; i < 10; i++) {
-			Point randomPoint = getAFreeCellLocation(); // handles removing the point from the list
+			Point randomPoint = getAFreeCellLocation(); // handles removing the
+														// point from the list
 			Zombie newZombie = new Zombie();
 			newZombie.setLocation(randomPoint);
-			((CharacterCell) map[randomPoint.x][randomPoint.y]).setCharacter(newZombie);
+			((CharacterCell) map[randomPoint.x][randomPoint.y])
+					.setCharacter(newZombie);
 			zombies.add(newZombie);
 		}
 	}
@@ -144,14 +164,16 @@ public class Game {
 	public static void spawningRandomVaccines() {
 		for (int i = 0; i < 5; i++) {
 			Point randomPoint = getAFreeCellLocation();
-			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Vaccine());
+			map[randomPoint.x][randomPoint.y] = new CollectibleCell(
+					new Vaccine());
 		}
 	}
 
 	public static void spawningRandomSupplies() {
 		for (int i = 0; i < 5; i++) {
 			Point randomPoint = getAFreeCellLocation();
-			map[randomPoint.x][randomPoint.y] = new CollectibleCell(new Supply());
+			map[randomPoint.x][randomPoint.y] = new CollectibleCell(
+					new Supply());
 		}
 	}
 
@@ -185,7 +207,8 @@ public class Game {
 
 	}
 
-	public static Hero heroDataParser(String[] row) throws EnumConstantNotPresentException {
+	public static Hero heroDataParser(String[] row)
+			throws EnumConstantNotPresentException {
 		String name = row[0];
 		HeroType type = HeroType.valueOf(row[1]);
 		int maxHp = Integer.parseInt(row[2]);
@@ -215,7 +238,8 @@ public class Game {
 	public static boolean checkWin() {
 		if (!AllVaccinesCollected())
 			return false;
-		if (CountControllableHeroes() >= 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes)) {
+		if (CountControllableHeroes() >= 5 && AllVaccinesCollected()
+				&& HeroUsedAllVaccines(heroes)) {
 			return true;
 		}
 		return false;
@@ -248,7 +272,8 @@ public class Game {
 		int c = 0;
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				if (map[i][j] instanceof CharacterCell && (((CharacterCell) map[i][j]).getCharacter() instanceof Hero))
+				if (map[i][j] instanceof CharacterCell
+						&& (((CharacterCell) map[i][j]).getCharacter() instanceof Hero))
 					c++;
 			}
 		}
@@ -258,7 +283,8 @@ public class Game {
 	public static boolean checkGameOver() {
 		if (CountControllableHeroes() == 0)
 			return true;
-		if (CountControllableHeroes() < 5 && AllVaccinesCollected() && HeroUsedAllVaccines(heroes))
+		if (CountControllableHeroes() < 5 && AllVaccinesCollected()
+				&& HeroUsedAllVaccines(heroes))
 			return true;
 		return false;
 	}

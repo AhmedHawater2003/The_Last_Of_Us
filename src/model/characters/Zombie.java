@@ -2,11 +2,11 @@ package model.characters;
 
 import java.awt.Point;
 
+import model.world.Cell;
+import model.world.CharacterCell;
 import engine.Game;
 import exceptions.InvalidTargetException;
 import exceptions.NotEnoughActionsException;
-import model.world.Cell;
-import model.world.CharacterCell;
 
 public class Zombie extends Character {
 	static int ZOMBIES_COUNT = 1;
@@ -18,7 +18,8 @@ public class Zombie extends Character {
 
 	// ! Zombie attack should not through errors, it should
 	// ! just do nothing if the target is invalid
-	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+	public void attack() throws InvalidTargetException,
+			NotEnoughActionsException {
 		setZombieTarget();
 		if (this.getTarget() == null) {
 			return;
