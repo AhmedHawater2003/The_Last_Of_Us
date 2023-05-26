@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -47,10 +48,11 @@ public class MainView extends Application { // TODO : Remove Later
 	public static VBox controllabeleHeros;
 
 	public static boolean isInteractable = true;
+	public static boolean zombieWillAttack = false;
 	public static myButton selectedHeroButton;
 	public static myButton selectedTargetButton;
 
-	public static ArrayList<myButton> zombieButtons = new ArrayList<myButton>();
+	public static ArrayList<Point> zombieLocations = new ArrayList<Point>();
 
 	// public MainView(Stage s, Hero h) {
 	// try {
@@ -73,9 +75,6 @@ public class MainView extends Application { // TODO : Remove Later
 	}
 
 	public static void fuckMap() {
-		if (!isInteractable) {
-			return;
-		}
 		mapGrid = new GridPane();
 		herosBar = new VBox();
 
@@ -121,8 +120,6 @@ public class MainView extends Application { // TODO : Remove Later
 		tmpVbox.getChildren().addAll(mapGrid, interactingStatusBar);
 		tmpVbox.setSpacing(10);
 		root.setCenter(tmpVbox);
-
-		zombieButtons.clear();
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				Cell c = Game.map[i][j];
@@ -141,10 +138,12 @@ public class MainView extends Application { // TODO : Remove Later
 					selectedTargetButton = bttn;
 				}
 
-				if (c instanceof CharacterCell
-						&& ((CharacterCell) c).getCharacter() instanceof Zombie) {
-					zombieButtons.add(bttn);
-				}
+				// if (!zombieWillAttack && c instanceof CharacterCell
+				// && ((CharacterCell) c).getCharacter() instanceof Zombie) {
+				//
+				// zombieLocations.add(((CharacterCell) c).getCharacter()
+				// .getLocation());
+				// }
 
 				bttn.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
@@ -181,7 +180,8 @@ public class MainView extends Application { // TODO : Remove Later
 
 							else {
 								if (c instanceof CharacterCell
-										&& selectedHeroButton != null) {
+										&& selectedHeroButton != null
+										&& c.isVisible()) {
 									if (selectedTargetButton != null) {
 										selectedTargetButton.getStyleClass()
 												.remove("target");
@@ -221,16 +221,47 @@ public class MainView extends Application { // TODO : Remove Later
 	}
 
 	public static int getGridIndex(Point p) {
-		return p.y * 15 + p.x;
+		return p.x * 15 + p.y;
+	}
+
+	public static void zombieAttacking() {
+		if (Game.zombiesTmpList.isEmpty()) {
+			Game.tail();
+			isInteractable = true;
+			fuckMap();
+			return;
+		}
+		Zombie onTurn = Game.zombiesTmpList.remove(0);
+		onTurn.setZombieTarget();
+		Node zombieButton = mapGrid.getChildren().get(
+				getGridIndex(onTurn.getLocation()));
+		if (onTurn.getTarget() != null) {
+			Node targetButton = mapGrid.getChildren().get(
+					getGridIndex(onTurn.getTarget().getLocation()));
+			zombieButton.getStyleClass().add("attackingZombie");
+			targetButton.getStyleClass().add("damged");
+			PauseTransition pauseTransition = new PauseTransition(
+					Duration.seconds(1));
+			pauseTransition.setOnFinished(event -> {
+				try {
+					zombieButton.getStyleClass().remove("attackingZombie");
+					targetButton.getStyleClass().remove("damged");
+					onTurn.attack();
+					fuckMap();
+					zombieAttacking();
+				} catch (Exception e) {
+					((Label) interactingStatusBar.getChildren().get(0))
+							.setText("fucking Error " + e.getMessage());
+				}
+
+			});
+			pauseTransition.play();
+		} else
+			zombieAttacking();
+
 	}
 
 	public void start(Stage primaryStage) {
-		// primaryStage.setTitle("The Last of Us");
-		// primaryStage.setMaximized(true);
-		// primaryStage.setScene(MainScene);
-		//
-		// MainScene.getStylesheets().add(
-		// getClass().getResource("styles.css").toExternalForm());
 
 		ImageView background = new ImageView(new Image("views\\BG1.jpg", 1980,
 				1080, true, true));
@@ -299,30 +330,10 @@ public class MainView extends Application { // TODO : Remove Later
 						break;
 					}
 					case E: {
-
-						wait = true;
+						Game.head();
 						isInteractable = false;
-						System.out.println(zombieButtons.size());
-						for (myButton zombieBttn : zombieButtons) {
-							zombieBttn.getStyleClass().add("target");
-						}
+						zombieAttacking();
 
-						PauseTransition pauseTransition = new PauseTransition(
-								Duration.seconds(0.5));
-						pauseTransition.setOnFinished(event -> {
-							isInteractable = true;
-							try {
-								Game.endTurn();
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							fuckMap();
-						});
-
-						pauseTransition.play();
-
-						//
 					}
 					}
 
@@ -378,5 +389,4 @@ public class MainView extends Application { // TODO : Remove Later
 		primaryStage.show();
 
 	}
-
 }
