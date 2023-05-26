@@ -48,6 +48,7 @@ public class MainView extends Application {
 		Game.loadHeroes("Heros.csv");
 		Game.startGame(new Fighter("Bill", 100, 100, 1000));
 		myButton.loadingIconsDict();
+		ViewHelpers.loadingIconsDict();
 		launch(args);
 	}
 

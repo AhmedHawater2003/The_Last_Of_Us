@@ -23,25 +23,27 @@ public class ViewHelpers {
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
 			.getHeight();
 
-	public static HashMap<String, String> iconsDict() {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("Ellie Williams", "views\\ellie.png");
-		map.put("Joel Miller", "views\\joel.png");
-		map.put("Tess", "views\\tess.png");
-		map.put("Riley Abel", "views\\riley.png");
-		map.put("Tommy Miller", "views\\tommy.png");
-		map.put("Bill", "views\\bill.png");
-		map.put("David", "views\\david.png");
-		map.put("Henry Burell", "views\\henry.png");
-		return map;
+	public static HashMap<String, Image> icons = new HashMap<String, Image>();
 
+	public static void loadingIconsDict() {
+		icons.put("Ellie Williams", new Image("views\\ellie.png"));
+		icons.put("Joel Miller", new Image("views\\joel.png"));
+		icons.put("Tess", new Image("views\\tess.png"));
+		icons.put("Riley Abel", new Image("views\\riley.png"));
+		icons.put("Tommy Miller", new Image("views\\tommy.png"));
+		icons.put("Bill", new Image("views\\bill.png"));
+		icons.put("David", new Image("views\\david.png"));
+		icons.put("Henry Burell", new Image("views\\henry.png"));
+		icons.put("heart", new Image("icons\\heart.png"));
+		// icons.put("supply", new Image("icons\\supply.png"));
+		// icons.put("vaccine", new Image("icons\\vaccine.png"));
+		// icons.put("trap", new Image("views\\assasin.png"));
 	}
 
-	public static Pane labelWithIconPane(String txt, String iconPath) {
+	public static Pane labelWithIconPane(String txt, Image iconImage) {
 		HBox pane = new HBox();
 		Label icon = new Label();
 		Label text = new Label(txt);
-		Image iconImage = new Image(iconPath);
 		ImageView iconView = new ImageView(iconImage);
 		iconView.setFitHeight(15);
 		iconView.setFitWidth(15);
@@ -57,16 +59,16 @@ public class ViewHelpers {
 		VBox pane = (VBox) availableHeroInfo(hero);
 		pane.getChildren().add(
 				labelWithIconPane(hero.getSupplyInventory().toString(),
-						"icons\\heart.png"));
+						icons.get("heart")));
 		pane.getChildren().add(
 				labelWithIconPane(hero.getVaccineInventory().toString(),
-						"icons\\heart.png"));
+						icons.get("heart")));
 		Character target = hero.getTarget();
 		if (target != null && target instanceof Zombie) {
 			pane.getChildren().add(
 					labelWithIconPane(
 							target.getCurrentHp() + " / " + target.getMaxHp(),
-							"icons\\heart.png"));
+							icons.get("heart")));
 		}
 		return pane;
 	}
@@ -75,26 +77,25 @@ public class ViewHelpers {
 		VBox pane = new VBox();
 		String type = hero.getClass().toString().split("\\.")[2];
 		pane.getChildren().add(
-				labelWithIconPane(hero.getName(), "icons\\heart.png"));
-		pane.getChildren().add(labelWithIconPane(type, "icons\\heart.png"));
+				labelWithIconPane(hero.getName(), icons.get("heart")));
+		pane.getChildren().add(labelWithIconPane(type, icons.get("heart")));
 		pane.getChildren().add(
 				labelWithIconPane(
 						hero.getCurrentHp() + " / " + hero.getMaxHp(),
-						"icons\\heart.png"));
+						icons.get("heart")));
 		pane.getChildren()
 				.add(labelWithIconPane(hero.getAttackDmg() + "",
-						"icons\\heart.png"));
+						icons.get("heart")));
 		pane.getChildren().add(
 				labelWithIconPane(
 						hero.getActionsAvailable() + " / "
-								+ hero.getMaxActions(), "icons\\heart.png"));
+								+ hero.getMaxActions(), icons.get("heart")));
 		return pane;
 	}
 
 	public static Node borderedImage(String imagePath, double imageHigh) {
 		Label label = new Label();
-		Image image = new Image(iconsDict().get(imagePath));
-		ImageView imageView = new ImageView(image);
+		ImageView imageView = new ImageView(icons.get(imagePath));
 		imageView.setFitHeight(imageHigh);
 		imageView.setPreserveRatio(true);
 		label.setGraphic(imageView);

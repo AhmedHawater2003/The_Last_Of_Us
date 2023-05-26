@@ -15,7 +15,7 @@ import model.world.CollectibleCell;
 
 public class myButton extends Button {
 	Cell cell;
-	static HashMap<String, Image> icons = new HashMap<String, Image>();
+	public static HashMap<String, Image> icons = new HashMap<String, Image>();
 	// iconsDict();
 	public static final double WIDTH = Screen.getPrimary().getBounds()
 			.getWidth();
