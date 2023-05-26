@@ -169,14 +169,13 @@ public class SelectionView {
 	         go.setText("Go to the game");
 	         go.setOnAction(e -> {
 	 			try {
-					Game.startGame(new Fighter("Bill", 2, 100, 1000));
-		        	 Game.loadHeroes("Heros.csv");
+	 				MainView sv = new MainView(primaryStage, new Fighter("Bill", 2, 100, 1000));
 
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		        	MainView sv = new MainView(primaryStage);
+		        	
 		        });
 	         
 	           

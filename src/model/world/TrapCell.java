@@ -2,8 +2,6 @@ package model.world;
 
 import java.util.Random;
 
-import model.characters.Hero;
-
 public class TrapCell extends Cell {
 	@Override
 	public String toString() {
@@ -27,7 +25,7 @@ public class TrapCell extends Cell {
 		return PossibleDamage[randomIndex];
 	}
 
-	public void applyDamage(Hero h) {
-		h.setCurrentHp(h.getCurrentHp() - this.getTrapDamage());
-	}
+	// public void applyDamage(Hero h) {
+	// // h.setCurrentHp(h.getCurrentHp() - this.getTrapDamage());
+	// }
 }

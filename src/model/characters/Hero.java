@@ -9,16 +9,16 @@ package model.characters;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import engine.Game;
-import exceptions.InvalidTargetException;
-import exceptions.MovementException;
-import exceptions.NoAvailableResourcesException;
-import exceptions.NotEnoughActionsException;
 import model.collectibles.Supply;
 import model.collectibles.Vaccine;
 import model.world.CharacterCell;
 import model.world.CollectibleCell;
 import model.world.TrapCell;
+import engine.Game;
+import exceptions.InvalidTargetException;
+import exceptions.MovementException;
+import exceptions.NoAvailableResourcesException;
+import exceptions.NotEnoughActionsException;
 
 public abstract class Hero extends Character {
 	private int actionsAvailable;
@@ -26,6 +26,8 @@ public abstract class Hero extends Character {
 	private boolean specialAction;
 	private ArrayList<Vaccine> vaccineInventory; // Read Only
 	private ArrayList<Supply> supplyInventory; // Read Only
+	public boolean isTrapped; // ! Should be private
+	public int damgeTaken;
 
 	public Hero(String name, int maxHp, int attackDmg, int maxActions) {
 		super(name, maxHp, attackDmg);
@@ -33,9 +35,11 @@ public abstract class Hero extends Character {
 		this.actionsAvailable = this.maxActions;
 		this.vaccineInventory = new ArrayList<>();
 		this.supplyInventory = new ArrayList<>();
+
 	}
 
-	public void attack() throws InvalidTargetException, NotEnoughActionsException {
+	public void attack() throws InvalidTargetException,
+			NotEnoughActionsException {
 		if (this.getTarget() == null) {
 			throw new InvalidTargetException("No target to attack");
 		}
@@ -44,7 +48,8 @@ public abstract class Hero extends Character {
 			throw new NotEnoughActionsException("No actions available");
 		}
 		if (this.getTarget() instanceof Hero) {
-			throw new InvalidTargetException("A hero cannot attack another hero");
+			throw new InvalidTargetException(
+					"A hero cannot attack another hero");
 		}
 		super.attack();
 		if (!(this instanceof Fighter && this.specialAction)) {
@@ -52,7 +57,8 @@ public abstract class Hero extends Character {
 		}
 	}
 
-	public void cure() throws NotEnoughActionsException, NoAvailableResourcesException, InvalidTargetException {
+	public void cure() throws NotEnoughActionsException,
+			NoAvailableResourcesException, InvalidTargetException {
 		if (this.getTarget() == null) {
 			throw new InvalidTargetException("No target to cure");
 		}
@@ -70,6 +76,7 @@ public abstract class Hero extends Character {
 		}
 
 		this.vaccineInventory.get(0).use(this);
+		this.setTarget(null); // M3
 		this.actionsAvailable--;
 
 	}
@@ -98,7 +105,18 @@ public abstract class Hero extends Character {
 		this.setAdjCellsVisiblity(true);
 	}
 
-	public void move(Direction d) throws MovementException, NotEnoughActionsException {
+	public void applyDamgeTaken() {
+		this.setCurrentHp(this.getCurrentHp() - damgeTaken);
+		damgeTaken = 0;
+		isTrapped = false;
+		if (this.getCurrentHp() <= 0) {
+			this.onCharacterDeath();
+		} else
+			this.setAdjCellsVisiblity(true);
+	}
+
+	public void move(Direction d) throws MovementException,
+			NotEnoughActionsException {
 		if (this.actionsAvailable <= 0) {
 			throw new NotEnoughActionsException();
 		}
@@ -141,11 +159,15 @@ public abstract class Hero extends Character {
 		}
 		// if new Cell is Trap
 		if (Game.map[newposX][newposY] instanceof TrapCell) {
-			((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
+			TrapCell trap = ((TrapCell) Game.map[newposX][newposY]);
+			this.isTrapped = true;
+			this.damgeTaken = trap.getTrapDamage();
+			// ((TrapCell) Game.map[newposX][newposY]).applyDamage(this);
 		}
 		// if new Cell is collectible
 		if (Game.map[newposX][newposY] instanceof CollectibleCell) {
-			((CollectibleCell) Game.map[newposX][newposY]).getCollectible().pickUp(this);
+			((CollectibleCell) Game.map[newposX][newposY]).getCollectible()
+					.pickUp(this);
 		}
 
 		actionsAvailable--;
@@ -160,9 +182,11 @@ public abstract class Hero extends Character {
 
 	}
 
-	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
+	public void useSpecial() throws NoAvailableResourcesException,
+			InvalidTargetException {
 		if (this.supplyInventory.isEmpty()) {
-			throw new NoAvailableResourcesException("NoAvailableResourcesException");
+			throw new NoAvailableResourcesException(
+					"NoAvailableResourcesException");
 		}
 		this.supplyInventory.remove(0);
 		this.setSpecialAction(true);
