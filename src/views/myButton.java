@@ -35,10 +35,8 @@ public class myButton extends Button {
 		icons.put("David", new Image("views\\david.png"));
 		icons.put("Henry Burell", new Image("views\\henry.png"));
 		icons.put("zombie", new Image("views\\zombie.png"));
-		icons.put("supply", new Image("icons\\supply.png"));
-		icons.put("vaccine", new Image("icons\\vaccine.png"));
-		icons.put("trap", new Image("views\\assasin.png"));
-	}
+		icons.put("supply", new Image("views\\supplyuu.png"));
+    	icons.put("vaccine", new Image("views\\vaccineGrid.png"));	}
 
 	public myButton(Cell cell) {
 		this.cell = cell;
@@ -47,10 +45,10 @@ public class myButton extends Button {
 	}
 
 	public void updateButtonView() {
-		// if (!cell.isVisible()) {
-		// this.setEffect(new javafx.scene.effect.GaussianBlur(10.5));
-		// this.setId("blured");
-		// } else {
+		 if (!cell.isVisible()) {
+		 this.setEffect(new javafx.scene.effect.GaussianBlur(10.5));
+		 this.setId("blured");
+		 } else {
 
 		if (cell instanceof CharacterCell) {
 			if (((CharacterCell) cell).getCharacter() instanceof Hero) {
@@ -72,7 +70,7 @@ public class myButton extends Button {
 		}
 	}
 
-	// }
+	 }
 
 	public ImageView getImageView(Image path) {
 		ImageView view = new ImageView(path);

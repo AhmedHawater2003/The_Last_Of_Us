@@ -42,8 +42,7 @@ public abstract class Hero extends Character {
 			throw new NotEnoughActionsException("No actions available");
 		}
 		if (this.getTarget() instanceof Hero) {
-			throw new InvalidTargetException(
-					"A hero cannot attack another hero");
+			throw new InvalidTargetException("A hero cannot attack another hero");
 		}
 		super.attack();
 		if (!(this instanceof Fighter && this.specialAction)) {
@@ -112,8 +111,7 @@ public abstract class Hero extends Character {
 	public void move(Direction d) throws MovementException,
 			NotEnoughActionsException {
 		if (this.actionsAvailable <= 0) {
-			throw new NotEnoughActionsException(
-					"Fuuuuckkk youuuuu Mafeesh khra action point ya a3maaaa");
+			throw new NotEnoughActionsException("No actions available");
 		}
 		if (this.getCurrentHp() <= 0) {
 			this.onCharacterDeath();
@@ -150,7 +148,7 @@ public abstract class Hero extends Character {
 		// if the Cell is occupied
 		if ((Game.map[newposX][newposY] instanceof CharacterCell)
 				&& ((CharacterCell) Game.map[newposX][newposY]).getCharacter() != null) {
-			throw new MovementException("You Can Not Move into Occupied Cell");
+			throw new MovementException("You Can Not Move into an Occupied Cell");
 		}
 		// if new Cell is Trap
 		if (Game.map[newposX][newposY] instanceof TrapCell) {
@@ -180,8 +178,7 @@ public abstract class Hero extends Character {
 	public void useSpecial() throws NoAvailableResourcesException,
 			InvalidTargetException {
 		if (this.supplyInventory.isEmpty()) {
-			throw new NoAvailableResourcesException(
-					"NoAvailableResourcesException");
+			throw new NoAvailableResourcesException("No Available Resources Exception");
 		}
 		this.supplyInventory.remove(0);
 		this.setSpecialAction(true);

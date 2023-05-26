@@ -82,6 +82,14 @@
 	-fx-background-color : radial-gradient(center 50% 50%, radius 50%,rgba(255, 0, 0, 1) 0%, transparent 100%);
 }
 
+.bar{
+    -fx-font-family: 'CHILLER';
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+}
+
 
 .target{
   -fx-border-color:rgb(148, 1, 1);

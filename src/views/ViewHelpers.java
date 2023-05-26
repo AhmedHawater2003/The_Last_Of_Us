@@ -34,10 +34,15 @@ public class ViewHelpers {
 		icons.put("Bill", new Image("views\\bill.png"));
 		icons.put("David", new Image("views\\david.png"));
 		icons.put("Henry Burell", new Image("views\\henry.png"));
-		icons.put("heart", new Image("icons\\heart.png"));
-		// icons.put("supply", new Image("icons\\supply.png"));
-		// icons.put("vaccine", new Image("icons\\vaccine.png"));
-		// icons.put("trap", new Image("views\\assasin.png"));
+		
+		icons.put("currentHp", new Image("icons\\heart.png"));
+		icons.put("actionPoints", new Image("views\\actionp.png"));
+		icons.put("attackDmg", new Image("views\\attdmg.png"));
+		icons.put("supplyInfo", new Image("icons\\supply.png"));
+		icons.put("vaccineInfo", new Image("icons\\vaccine.png"));
+		icons.put("zombieHp", new Image("views\\zombieFace.png"));
+		icons.put("supplyGrid", new Image("views\\supplyuu.png"));
+    	icons.put("vaccineGrid", new Image("views\\vaccineGrid.png"));
 	}
 
 	public static Pane labelWithIconPane(String txt, Image iconImage) {
@@ -45,8 +50,8 @@ public class ViewHelpers {
 		Label icon = new Label();
 		Label text = new Label(txt);
 		ImageView iconView = new ImageView(iconImage);
-		iconView.setFitHeight(15);
-		iconView.setFitWidth(15);
+		iconView.setFitHeight(20);
+		iconView.setFitWidth(20);
 		icon.setGraphic(iconView);
 		pane.getChildren().addAll(icon, text);
 		pane.setPadding(new Insets(2, 5, 2, 5));
@@ -59,16 +64,16 @@ public class ViewHelpers {
 		VBox pane = (VBox) availableHeroInfo(hero);
 		pane.getChildren().add(
 				labelWithIconPane(hero.getSupplyInventory().toString(),
-						icons.get("heart")));
+						icons.get("supplyInfo")));
 		pane.getChildren().add(
 				labelWithIconPane(hero.getVaccineInventory().toString(),
-						icons.get("heart")));
+						icons.get("vaccineInfo")));
 		Character target = hero.getTarget();
 		if (target != null && target instanceof Zombie) {
 			pane.getChildren().add(
 					labelWithIconPane(
 							target.getCurrentHp() + " / " + target.getMaxHp(),
-							icons.get("heart")));
+							icons.get("zombieHp")));
 		}
 		return pane;
 	}
@@ -82,14 +87,14 @@ public class ViewHelpers {
 		pane.getChildren().add(
 				labelWithIconPane(
 						hero.getCurrentHp() + " / " + hero.getMaxHp(),
-						icons.get("heart")));
+						icons.get("currentHp")));
 		pane.getChildren()
 				.add(labelWithIconPane(hero.getAttackDmg() + "",
-						icons.get("heart")));
+						icons.get("attackDmg")));
 		pane.getChildren().add(
 				labelWithIconPane(
 						hero.getActionsAvailable() + " / "
-								+ hero.getMaxActions(), icons.get("heart")));
+								+ hero.getMaxActions(), icons.get("actionPoints")));
 		return pane;
 	}
 

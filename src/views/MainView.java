@@ -76,7 +76,7 @@ public class MainView extends Application { // TODO : Remove Later
 		if (!isInteractable) {
 			return;
 		}
-		mapGrid = new GridPane();
+				mapGrid = new GridPane();
 		herosBar = new VBox();
 
 		mapGrid.setPrefSize(WIDTH - WIDTH / 6, HEIGHT - HEIGHT / 15);
@@ -88,7 +88,9 @@ public class MainView extends Application { // TODO : Remove Later
 		herosBar.setSpacing(20);
 
 		interactingStatusBar = new HBox();
-		interactingStatusBar.getChildren().add(new Label("Fuck Deadlins"));
+		Label txt = new Label("");
+		txt.getStyleClass().add("bar");
+		interactingStatusBar.getChildren().add(txt);
 		interactingStatusBar.getStyleClass().add("heros");
 		interactingStatusBar.setAlignment(Pos.CENTER);
 		interactingStatusBar.setPadding(new Insets(5, 5, 5, 5));
@@ -204,6 +206,27 @@ public class MainView extends Application { // TODO : Remove Later
 		}
 
 		loadSelected();
+		if(Game.checkGameOver()){
+			Alert.displayGameOver("OoOoPs,,Game Over!","Game Over! The relentless horde of zombies has overrun your defenses, "
+					+ "\n and the last flicker of hope fades away. The once bustling city now stands silent, "
+					+ "\n consumed by darkness. Despite your valiant efforts to survive, "
+					+ "\n the unyielding forces of the undead proved too formidable. "
+					+ "\n Your courage and resourcefulness will be remembered, "
+					+ "\n but the world now falls deeper into the clutches of the zombie apocalypse. "
+					+ "\n Gather your strength, for a new dawn may bring another chance to reclaim what has been lost. "
+					+ "\n Prepare yourself, survivor, for the fight is not yet over.");
+		}
+		if(Game.checkWin()){
+			AlertWin.displayWin("Yayy,,You Just Won!!","  Victory Achieved! Against all odds,"
+					+ "\n you have emerged triumphant in the face of the relentless zombie horde. "
+					+ "\n Your unwavering determination and strategic prowess have paid off, "
+					+ "\n as you fought tooth and nail to reclaim the remnants of civilization. "
+					+ "\n The once desolate streets now echo with the sounds of hope and renewal. "
+					+ "\n Your courage has inspired others, and the survivors rally behind your leadership. "
+					+ "\n However, be ever vigilant, for the world remains a treacherous place. "
+					+ "\n Celebrate this hard-earned victory, but remember that the struggle for survival continues. "
+					+ "\n Embrace your triumph, hero, and prepare for the challenges that lie ahead.");
+		}
 
 	}
 
@@ -236,7 +259,6 @@ public class MainView extends Application { // TODO : Remove Later
 				1080, true, true));
 		root.getChildren().add(background);
 		MainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
 			public void handle(KeyEvent key) {
 				if (!isInteractable) {
 					return;
@@ -259,7 +281,7 @@ public class MainView extends Application { // TODO : Remove Later
 					}
 					case RIGHT: {
 						if (selectedHero == null) {
-							System.out.println("lol");
+							System.out.println("Please Select Hero First");
 						}
 						selectedHero.move(Direction.RIGHT);
 						break;
@@ -364,7 +386,7 @@ public class MainView extends Application { // TODO : Remove Later
 					}
 				} catch (Exception e) {
 					((Label) interactingStatusBar.getChildren().get(0))
-							.setText("fucking Error " + e.getMessage());
+							.setText("Error:" + e.getMessage());
 				}
 			}
 		});

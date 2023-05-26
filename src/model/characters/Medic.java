@@ -10,7 +10,7 @@ public class Medic extends Hero {
 
 	public void useSpecial() throws NoAvailableResourcesException, InvalidTargetException {
 		if (this.getTarget().equals(null) || this.getTarget() instanceof Zombie || !this.targetIsAdj())
-			throw new InvalidTargetException("InvalidTargetException");
+			throw new InvalidTargetException("Invalid Target Exception");
 		super.useSpecial();
 		this.getTarget().setCurrentHp(this.getTarget().getMaxHp());
 
