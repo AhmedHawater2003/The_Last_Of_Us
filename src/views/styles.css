@@ -93,6 +93,12 @@
 
 .target{
   -fx-border-color:rgb(148, 1, 1);
-  -fx-border-width: 2px;
+  -fx-border-width: 3px;
+  -fx-border-radius: 5px;
+}
+
+.attackingZombie{
+	-fx-border-color:rgb(77, 98, 3);
+  -fx-border-width: 3px;
   -fx-border-radius: 5px;
 }

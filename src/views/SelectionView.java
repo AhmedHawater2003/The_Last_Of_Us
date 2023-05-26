@@ -24,15 +24,6 @@ public class SelectionView {
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
 			.getHeight();
 	public static Hero selected = Game.availableHeroes.get(0);
-
-	// public SelectionView(Stage s) {
-	// start(s);
-	// }
-
-	// public static void main(String[] args) throws Exception{
-	// Game.loadHeroes("Heros.csv");
-	// launch(args);
-	// }
 	public static Scene start(Stage primaryStage) {
 
 		myButton selectedHero;
@@ -244,16 +235,16 @@ public class SelectionView {
 
 		go.setOnAction(e -> {
 			try {
-				// ViewHelpers.loadingIconsDict();
-				// myButton.loadingIconsDict();
-				// Game.loadHeroes("Heros.csv");
-				// Game.startGame(selected);
-				//
-				// Scene mainScene = MainView.start();
-				// mainScene.getStylesheets().add("views/styles.css");
-				// primaryStage.setTitle("The Last of Us");
-				// primaryStage.setMaximized(true);
-				// primaryStage.setScene(mainScene);
+				 ViewHelpers.loadingIconsDict();
+				 myButton.loadingIconsDict();
+				 Game.loadHeroes("Heros.csv");
+				 Game.startGame(selected);
+				
+				 Scene mainScene = MainView.start();
+				 mainScene.getStylesheets().add("views/styles.css");
+				 primaryStage.setTitle("The Last of Us");
+				 primaryStage.setMaximized(true);
+				 primaryStage.setScene(mainScene);
 
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block

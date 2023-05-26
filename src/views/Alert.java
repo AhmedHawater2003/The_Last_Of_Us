@@ -55,8 +55,6 @@ public class Alert {
 	    close.setText("Close");
 	    close.setOnAction(e -> {
 	    	gameOver.close();
-	    	Platform.exit();
-	    	System.exit(0);
 	    	});
 	    VBox layout = new VBox();
 	    layout.getChildren().addAll(over,close);

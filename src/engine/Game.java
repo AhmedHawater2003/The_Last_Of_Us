@@ -64,13 +64,11 @@ public class Game {
 		// ! from the list while traversing the list, which might
 		// ! lead to an error
 
-		for (Zombie z : zombies)
-			zombiesTmpList.add(z);
-
-		for (Zombie z : zombiesTmpList) {
-			z.attack();
-			z.setTarget(null);
-		}
+		//
+		// for (Zombie z : zombiesTmpList) {
+		// z.attack();
+		// z.setTarget(null);
+		// }
 
 		Character.spawnZombie();
 

@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -33,7 +34,7 @@ import model.world.Cell;
 import model.world.CharacterCell;
 import engine.Game;
 
-public class MainView extends Application { // TODO : Remove Later
+public class MainView  { // TODO : Remove Later
 	public static final double WIDTH = Screen.getPrimary().getBounds()
 			.getWidth();
 	public static final double HEIGHT = Screen.getPrimary().getBounds()
@@ -47,36 +48,16 @@ public class MainView extends Application { // TODO : Remove Later
 	public static VBox controllabeleHeros;
 
 	public static boolean isInteractable = true;
+	public static boolean zombieWillAttack = false;
 	public static myButton selectedHeroButton;
 	public static myButton selectedTargetButton;
+	public static ArrayList<Point> zombieLocations = new ArrayList<Point>();
 
-	public static ArrayList<myButton> zombieButtons = new ArrayList<myButton>();
-
-	// public MainView(Stage s, Hero h) {
-	// try {
-	// Game.loadHeroes("Heros.csv");
-	// Game.startGame(h);
-	// myButton.loadingIconsDict();
-	// ViewHelpers.loadingIconsDict();
-	// start(s);
-	// } catch (Exception e) {
-	// System.out.println("Fuuuuck");
-	// }
-	// }
-
-	public static void main(String[] args) throws Exception {
-		Game.loadHeroes("Heros.csv");
-		Game.startGame(new Fighter("Bill", 100, 100, 1000));
-		myButton.loadingIconsDict();
-		ViewHelpers.loadingIconsDict();
-		launch(args);
-	}
-
-	public static void fuckMap() {
+	public static void loadMap() {
 		if (!isInteractable) {
 			return;
 		}
-				mapGrid = new GridPane();
+		mapGrid = new GridPane();
 		herosBar = new VBox();
 
 		mapGrid.setPrefSize(WIDTH - WIDTH / 6, HEIGHT - HEIGHT / 15);
@@ -110,7 +91,7 @@ public class MainView extends Application { // TODO : Remove Later
 					ViewHelpers.availableHeroPane(hero));
 		}
 
-		// each time we call fuckMap we clear the selected hero pane
+		
 		herosBar.getChildren().add(scrollPane);
 		if (!Game.heroes.isEmpty())
 			root.setLeft(herosBar);
@@ -123,8 +104,6 @@ public class MainView extends Application { // TODO : Remove Later
 		tmpVbox.getChildren().addAll(mapGrid, interactingStatusBar);
 		tmpVbox.setSpacing(10);
 		root.setCenter(tmpVbox);
-
-		zombieButtons.clear();
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				Cell c = Game.map[i][j];
@@ -143,10 +122,7 @@ public class MainView extends Application { // TODO : Remove Later
 					selectedTargetButton = bttn;
 				}
 
-				if (c instanceof CharacterCell
-						&& ((CharacterCell) c).getCharacter() instanceof Zombie) {
-					zombieButtons.add(bttn);
-				}
+				
 
 				bttn.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
@@ -183,7 +159,8 @@ public class MainView extends Application { // TODO : Remove Later
 
 							else {
 								if (c instanceof CharacterCell
-										&& selectedHeroButton != null) {
+										&& selectedHeroButton != null
+										&& c.isVisible()) {
 									if (selectedTargetButton != null) {
 										selectedTargetButton.getStyleClass()
 												.remove("target");
@@ -232,7 +209,7 @@ public class MainView extends Application { // TODO : Remove Later
 
 	public static void loadSelected() {
 		if (selectedHeroButton != null) {
-			// System.out.println(selectedHeroButton.cell);
+			
 			Hero hero = (Hero) ((CharacterCell) selectedHeroButton.cell)
 					.getCharacter();
 
@@ -244,16 +221,47 @@ public class MainView extends Application { // TODO : Remove Later
 	}
 
 	public static int getGridIndex(Point p) {
-		return p.y * 15 + p.x;
+		return p.x * 15 + p.y;
 	}
 
-	public void start(Stage primaryStage) {
-		// primaryStage.setTitle("The Last of Us");
-		// primaryStage.setMaximized(true);
-		// primaryStage.setScene(MainScene);
-		//
-		// MainScene.getStylesheets().add(
-		// getClass().getResource("styles.css").toExternalForm());
+	public static void zombieAttacking() {
+		if (Game.zombiesTmpList.isEmpty()) {
+			Game.tail();
+			isInteractable = true;
+			loadMap();
+			return;
+		}
+		Zombie onTurn = Game.zombiesTmpList.remove(0);
+		onTurn.setZombieTarget();
+		Node zombieButton = mapGrid.getChildren().get(
+				getGridIndex(onTurn.getLocation()));
+		if (onTurn.getTarget() != null) {
+			Node targetButton = mapGrid.getChildren().get(
+					getGridIndex(onTurn.getTarget().getLocation()));
+			zombieButton.getStyleClass().add("attackingZombie");
+			targetButton.getStyleClass().add("damged");
+			PauseTransition pauseTransition = new PauseTransition(
+					Duration.seconds(1));
+			pauseTransition.setOnFinished(event -> {
+				try {
+					zombieButton.getStyleClass().remove("attackingZombie");
+					targetButton.getStyleClass().remove("damged");
+					onTurn.attack();
+					loadMap();
+					zombieAttacking();
+				} catch (Exception e) {
+					((Label) interactingStatusBar.getChildren().get(0))
+							.setText("WARNING :  " + e.getMessage() + " !!");
+				}
+
+			});
+			pauseTransition.play();
+		} else
+			zombieAttacking();
+
+	}
+
+	public static Scene start() {
 
 		ImageView background = new ImageView(new Image("views\\BG1.jpg", 1980,
 				1080, true, true));
@@ -304,7 +312,7 @@ public class MainView extends Application { // TODO : Remove Later
 								Duration.seconds(0.5));
 						pauseTransition.setOnFinished(event -> {
 							isInteractable = true;
-							fuckMap();
+							loadMap();
 						});
 
 						pauseTransition.play();
@@ -321,30 +329,10 @@ public class MainView extends Application { // TODO : Remove Later
 						break;
 					}
 					case E: {
-
-						wait = true;
+						Game.head();
 						isInteractable = false;
-						System.out.println(zombieButtons.size());
-						for (myButton zombieBttn : zombieButtons) {
-							zombieBttn.getStyleClass().add("target");
-						}
+						zombieAttacking();
 
-						PauseTransition pauseTransition = new PauseTransition(
-								Duration.seconds(0.5));
-						pauseTransition.setOnFinished(event -> {
-							isInteractable = true;
-							try {
-								Game.endTurn();
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							fuckMap();
-						});
-
-						pauseTransition.play();
-
-						//
 					}
 					}
 
@@ -365,7 +353,7 @@ public class MainView extends Application { // TODO : Remove Later
 
 					}
 					if (!wait) {
-						fuckMap();
+						loadMap();
 						if (selectedHero.isTrapped) {
 							selectedHero.applyDamgeTaken();
 
@@ -377,7 +365,7 @@ public class MainView extends Application { // TODO : Remove Later
 								selectedHeroButton.getStyleClass().remove(
 										"damged");
 								isInteractable = true;
-								fuckMap();
+								loadMap();
 							});
 							pauseTransition.play();
 
@@ -386,19 +374,16 @@ public class MainView extends Application { // TODO : Remove Later
 					}
 				} catch (Exception e) {
 					((Label) interactingStatusBar.getChildren().get(0))
-							.setText("Error:" + e.getMessage());
+							.setText("WARNING : " + e.getMessage() + " !!");
 				}
 			}
 		});
 
-		fuckMap();
-		// return MainScene;
+		loadMap();
+		
 		MainScene.getStylesheets().add("views/styles.css");
-		primaryStage.setTitle("The Last of Us");
-		primaryStage.setMaximized(true);
-		primaryStage.setScene(MainScene);
-		primaryStage.show();
+		return MainScene;
+
 
 	}
-
 }
