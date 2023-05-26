@@ -42,7 +42,7 @@ public class StartView extends Application {
 	public void start(Stage primaryStage) {
 		 
 		BorderPane first= new BorderPane();
-   	 ImageView background = new ImageView(new Image("views\\The-Last-of-Us-Part-2-Landscape-Header - Copy.png", 1980,
+   	 ImageView background = new ImageView(new Image("views\\winn.jpg", 1980,
              1080, true, true));
         	first.getChildren().add(background);
 		    primaryStage.setTitle("The Last of Us");
