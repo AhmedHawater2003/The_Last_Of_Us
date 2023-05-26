@@ -47,6 +47,7 @@ public class MainView extends Application {
 	public static void main(String[] args) throws Exception {
 		Game.loadHeroes("Heros.csv");
 		Game.startGame(new Fighter("Bill", 100, 100, 1000));
+		myButton.loadingIconsDict();
 		launch(args);
 	}
 
