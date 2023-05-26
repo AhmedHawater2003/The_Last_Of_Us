@@ -1,19 +1,11 @@
-.button{    -fx-background-color: rgba(1, 50, 32, 0.3); /* Adjust the alpha value (0.0 - 1.0) to control transparency */
-	-fx-font-size:25px; 
-  -fx-text-fill : rgb(255, 255, 255);
+.button{
+	-fx-font-size:65px; 
+  -fx-text-fill : '#a2c42f';
+  -fx-font-family: 'CHILLER';
   -fx-border-color:white; 
     -fx-border-width: 1px;
     }
     
-.label{
-	-fx-alignment: center ;
-	-fx-font-size : 15px;
-  -fx-text-align: center ;
-  -fx-font-weight: bold;
-  -fx-font-style: italic;
-  -fx-text-fill : rgb(255, 255, 255);
-  
-}
 .button-clicked {
     -fx-border-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #e2cd0e);
     -fx-border-width: 5px;
@@ -24,9 +16,16 @@
     -fx-border-width: 5px;
     
 }
-
+.radio-button{
+	-fx-font-size:35px; 
+  -fx-text-fill : '#a2c42f';
+  -fx-font-family: 'CHILLER';
+  -fx-border-color:white; 
+    -fx-border-width: 1px;
+}
 .radio-button > .radio {
   -fx-background-color: transparent;
+  
   -fx-background-insets: 0;
   -fx-background-radius: 0px;
   -fx-padding: 0.0em; /* 4 8 4 8 */
@@ -34,4 +33,46 @@
 
 .radio-button:selected > .radio > .dot {
   -fx-background-color: transparent;
+}
+
+
+    @font-face {
+    font-family: Delicious;
+    src: url('CHILLER.TTF');
+    
+}
+ @font-face {
+    font-family: Delicious;
+    src: url('Zombie_Holocaust.ttf');
+    
+}
+.vbox{
+	-fx-padding: 0 0 0 200;
+}
+.label{
+	-fx-alignment: center ;
+	-fx-font-size :65px;
+  -fx-text-align: center ;
+  -fx-font-weight: bold;
+  -fx-font-style: italic;
+-fx-font-family: 'CHILLER';
+  -fx-text-fill : '#a2c42f' ;
+   -fx-padding: 250 0 0 30;
+}
+
+.ipad-dark-grey {
+    -fx-background-color: 
+        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
+        linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
+        linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
+    -fx-background-insets: 0,1,4,5,6;
+    -fx-background-radius: 9,8,5,4,3;
+    -fx-padding: 15 30 15 30;
+    -fx-font-family: 'CHILLER';
+    -fx-font-size: 45px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
 }

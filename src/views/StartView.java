@@ -52,15 +52,23 @@ public class StartView extends Application {
 	        	SelectionView sv = new SelectionView(primaryStage);
 	        });
 	        start.setText("Start");
+	        start.getStyleClass().add("ipad-dark-grey");
 	         Button About= new Button();
 	         About.setText("About Game");
+	         About.getStyleClass().add("ipad-dark-grey");
 	         Button Exit= new Button();
 	         Exit.setText("Exit");
+	         Exit.getStyleClass().add("ipad-dark-grey");
 	         VBox menu = new VBox();
+	         start.setMinSize(250, 100);
+	         About.setMinSize(250, 100);
+	         Exit.setMinSize(250, 100);
 	         menu.getChildren().addAll(start,About,Exit);
-	         first.setCenter(menu);
+	         first.getChildren().add(menu);
+	         menu.setLayoutX(700);
+	         menu.setLayoutY(350);
+
 	         Scene StartMenu =new Scene(first);
-	         menu.setAlignment(Pos.CENTER);
 	     	primaryStage.setScene(StartMenu);
 	     	  menu.getStylesheets().add(getClass().getResource("selection.css").toExternalForm());
 	     	    	primaryStage.show();	      
